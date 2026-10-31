@@ -1,0 +1,90 @@
+/* You can add global styles to this file, and also import other style files */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+    background-repeat: no-repeat;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+.a-1 {
+    text-decoration: none;
+    background-color: rgba(255, 255, 255, 0.118);
+    border: 2px solid white;
+    border-radius: 10px;
+    padding: 10px;
+    color: rgba(255, 255, 255, 0.698);
+    margin-top: 15px;
+    transition: all 0.25s;
+}
+
+.a-1:hover {
+    transform: translateY(-3px);
+    background-color: rgba(255, 255, 255, 0.261);
+    cursor: pointer;
+}
+
+.register-button {
+    background-color: #d3ffada9;
+    border: 2px solid #c3ff8e;
+    border-radius: 10px;
+    padding: 10px;
+    color: #4f693a;
+    transition: all 0.25s;
+}
+
+.login-button {
+    background-color: #bfff874d;
+    border: 2px solid #c3ff8e;
+    border-radius: 10px;
+    padding: 10px;
+    color: #c3ff8e;
+    transition: all 0.25s;
+}
+
+.register-button:hover, .login-button:hover {
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
+@font-face {
+    font-family: "title-1";
+    src: url("fonts/Montserrat-LightItalic.ttf") format("truetype");
+    font-weight: 100;
+}
+
+@font-face {
+    font-family: "title-2";
+    src: url("fonts/Silkscreen-Regular.ttf") format("truetype");
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: "title-3";
+    src: url("fonts/Quantico-Regular.ttf") format("truetype");
+    font-weight: 400;
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes appear {
+    from {
+        transform: scale(0);
+    }
+
+    to {
+        transform: scale(1);
+    }
+}

@@ -1,0 +1,10 @@
+<div class="wrapper">
+    <h2>2da forma con HTTP Client</h2>
+    <div class="container">
+        <h1>¿Cómo está el clima?</h1>
+        <input type="text" #cityInput class="input-text" placeholder="Nombre de la ciudad (Ej: Buenos Aires)">
+        <input type="text" #countryInput class="input-text" placeholder="Código del país (Ej: Arg) - Opcional">
+        <button class="button" (click)="loadWeatherResults()">Obtener Clima</button>
+    </div>
+    <div #weatherInfo class="weather-info"></div>
+</div>

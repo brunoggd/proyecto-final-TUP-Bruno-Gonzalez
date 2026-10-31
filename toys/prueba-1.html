@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Scroll Snap + Header Sticky</title>
+    <style>
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+        }
+
+        /* Header sticky */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 10vh;
+            padding: 0 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Contenedor principal con scroll snap */
+        .container {
+            height: 100vh;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+
+        /* Secciones */
+        .section {
+            height: 100vh;
+            scroll-snap-align: start;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3em;
+            color: white;
+        }
+
+        .section:nth-child(1) {
+            background: #e74c3c;
+        }
+
+        .section:nth-child(2) {
+            background: #3498db;
+        }
+
+        .section:nth-child(3) {
+            background: #2ecc71;
+        }
+
+        .section:nth-child(4) {
+            background: #9b59b6;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <span>🏆 Torneos de Tenis</span>
+        <nav>
+            <a href="#s1" style="color:white; margin-right:15px;">Inicio</a>
+            <a href="#s2" style="color:white; margin-right:15px;">Crear</a>
+            <a href="#s3" style="color:white; margin-right:15px;">Info</a>
+            <a href="#s4" style="color:white;">Contacto</a>
+        </nav>
+    </div>
+
+    <div class="container">
+        <section id="s1" class="section">Sección 1</section>
+        <section id="s2" class="section">Sección 2</section>
+        <section id="s3" class="section">Sección 3</section>
+        <section id="s4" class="section">Sección 4</section>
+    </div>
+</body>
+
+</html>

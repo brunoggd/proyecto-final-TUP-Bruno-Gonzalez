@@ -1,0 +1,108 @@
+.home {
+    background: url('../../../../../../public/bg-1.jpg') rgba(0, 0, 0, 0.467);
+    background-position: center;
+    background-attachment: fixed;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.home-page {
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
+    width: 100%;
+    height: 100vh;
+    background-blend-mode: darken;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.home-page__content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    overflow: auto;
+    width: 100%;
+    min-height: 100vh;
+    backdrop-filter: blur(2px);
+    background-color: rgba(0, 0, 0, 0.366);
+    scroll-snap-align: start;
+}
+
+#section-2 {
+    background: url('../../../../../../public/bg-2.jpg') rgba(0, 0, 0, 0.693);
+    background-blend-mode: darken;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+#section-3 {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    background: url('../../../../../../public/bg-3.png') rgba(0, 0, 0, 0.288);
+    background-blend-mode: darken;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.home-page__register-and-login {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 25px;
+    padding: 0 10px;
+}
+
+.home-page__title {
+    width: 35%;
+    font-family: 'title-1';
+    font-size: 2rem;
+    justify-self: center;
+    align-self: center;
+    text-align: center;
+    color: white;
+}
+
+#title-2 {
+    font-size: 2.5rem;
+}
+
+.home-page__presentation-title {
+    font-family: "title-2";
+    color: white;
+}
+
+.home-page__img {
+    object-fit: contain;
+    justify-self: center;
+    align-self: center;
+    width: 25%;
+    height: 25%;
+}
+
+#image-1 {
+    width: 25%;
+    height: 45%;
+}
+
+#image-2 {
+    width: 25%;
+    height: 45%;
+}
+
+#tennis-ball {
+    width: 10%;
+    height: 70%;
+    opacity: 0.75;
+}
+
+#title-1, #image-1 {
+    animation: fade-in 0.5s ease-in-out;
+}

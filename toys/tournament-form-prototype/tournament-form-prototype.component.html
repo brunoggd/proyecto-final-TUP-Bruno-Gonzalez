@@ -1,0 +1,49 @@
+<div class="wrapper">
+    <form [formGroup]="tournament_group" class="form">
+        <h1 class="title">¡Vamos a crear un torneo!</h1>
+        <fieldset class="fieldset">
+            <label for="name" class="label">Nombre:</label>
+            <input type="text" class="input-text" id="name" [formControl]="tournament_name" placeholder="Nombre del torneo...">
+        </fieldset>
+        <fieldset class="fieldset">
+            <label for="category" class="label">Categoría:</label>
+            <input type="text" class="input-text" id="category" [formControl]="tournament_category" placeholder="Categoría del torneo...">
+        </fieldset>
+        <fieldset class="fieldset">
+            <label for="participants" class="label">Participantes:</label>
+            <input type="number" class="input-number" id="participants" [formControl]="tournament_participants" placeholder="Participantes del torneo..." min="0">
+        </fieldset>
+        <fieldset class="fieldset">
+            <label for="prize" class="label">Premio:</label>
+            <input type="checkbox" class="input-checkbox" id="prize" [formControl]="tournament_prize" #checkbox>
+            @if (thereIsAPrize) {
+                <div class="prizeAmount-container">
+                    <label for="prizeAmount" class="label">Monto del premio:</label>
+                    <input type="text" class="input-text" id="prizeAmount" [formControl]="tournament_prizeAmount" placeholder="$15000">
+                </div>
+            }
+        </fieldset>
+        <fieldset class="fieldset">
+            <label for="startDate" class="label">Fecha de inicio:</label>
+            <input type="date" class="input-date" id="startDate" [formControl]="tournament_startDate">
+        </fieldset>
+        <fieldset class="fieldset">
+            <label for="endDate" class="label">Fecha de finalización:</label>
+            <input type="date" class="input-date" id="endDate" [formControl]="tournament_endDate">
+        </fieldset>
+        <div class="required">
+            @if (tournament_name.touched && tournament_name.invalid) {
+                <p>El nombre es obligatorio</p>
+            } @else if (tournament_category.touched && tournament_category.invalid) {
+                <p>La categoría es obligatoria</p>
+            } @else if (tournament_participants.touched && tournament_participants.invalid) {
+                <p>Los participantes son obligatorios</p>
+            } @else if (tournament_startDate.touched && tournament_startDate.invalid) {
+                <p>La fecha de inicio es obligatoria</p>
+            } @else if (tournament_endDate.touched && tournament_endDate.invalid) {
+                <p>La fecha de finalización es obligatoria</p>
+            }
+        </div>
+        <button class="button" (click)="handleSubmit()" [disabled]="tournament_group.invalid">Crear Torneo</button>
+    </form>
+</div>

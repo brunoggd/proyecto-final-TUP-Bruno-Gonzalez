@@ -1,0 +1,104 @@
+.torneos {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: linear-gradient(#001F02, #061206);
+}
+
+.torneos__gestion {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    height: 80vh;
+    /* outline: 2px solid red; */
+    /* transform: scale(0.9); */
+}
+
+.torneos__gestion-resultados {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: center;
+    flex-wrap: wrap;
+    overflow: auto;
+    overflow-x: hidden;
+    width: 25%;
+    height: 100%;
+    flex-grow: 1;
+    padding: 10px;
+    gap: 10px;
+    border-right: 2px solid rgb(0, 54, 0);
+    /* background-color: red; */
+}
+
+.torneos__gestion-panel-torneo {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 75%;
+    height: 100%;
+    flex-grow: 1;
+    /* background-color: yellow; */
+}
+
+.torneos__title {
+    color: white;
+    font-size: 2rem;
+    font-family: 'title-3';
+}
+
+.search-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    height: 20vh;
+    background: rgba(0, 0, 0, 0.153);
+    border-bottom: 2px solid rgb(0, 54, 0);
+}
+
+.search-section__search-bar, .search-section__filters {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    height: 50%;
+    gap: 10px;
+    flex-grow: 1;
+}
+
+.img {
+    object-fit: contain;
+    width: 2%;
+    height: 55%;
+}
+
+.search-input, .select {
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid greenyellow;
+}
+
+.search-input {
+    width: 50%;
+}
+
+.select {
+    width: 10%;
+}
+
+.label {
+    color: white;
+    font-family: "title-3";
+    font-size: 1.1rem;
+}

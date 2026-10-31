@@ -1,0 +1,19 @@
+<div class="torneo-editor">
+    <div class="torneo-editor__torneo-name">
+        <p class="torneo-name"> {{ torneo.nombre }} </p>
+    </div>
+    <div class="torneo-editor__info">
+        <div class="torneo-editor__info-section">
+            <p> {{ torneo.fechaFin | date: 'shortDate' }} </p>
+            <p> {{ torneo.fechaInicio | date: 'shortDate' }} </p>
+            <p> {{ torneo.id_torneo }} </p>
+            <p> {{ torneo.jugadores }} </p>
+            <p> {{ torneo.montoPremio }} </p>
+            <p> {{ torneo.premio }} </p>
+            <p> {{ torneo.ubicacion }} </p>
+        </div>
+        <div class="torneo-editor__info-inscriptos">
+            Acá van los inscriptos pero todavía está en construcción
+        </div>
+    </div>
+</div>

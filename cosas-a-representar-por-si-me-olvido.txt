@@ -1,0 +1,7 @@
+1- personas
+2- torneos
+3- partidos
+4- roles
+5- categorias
+6- inscripciones
+7- participaciones

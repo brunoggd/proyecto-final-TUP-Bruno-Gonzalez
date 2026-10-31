@@ -1,0 +1,79 @@
+<div class="register-form-container">
+    <form [formGroup]="registerForm" (ngSubmit)="registrarse()" class="register-form">
+        <div class="register-form__header">
+            <div class="register-form__header-button">
+                <button class="home-button" routerLink="/">←</button>
+            </div>
+            <div class="register-form__header-main-title">
+                <p class="register-form-main-title">Crea una cuenta</p>
+            </div>
+        </div>
+
+        <div class="register-form__field">
+            <label class="register-form__field-label">Nombre:</label>
+            <input class="register-form-input-text" formControlName="nombre" type="text" placeholder="Jhon">
+            <div *ngIf="registerForm.get('nombre')?.invalid && registerForm.get('nombre')?.touched">
+                El nombre es obligatorio
+            </div>
+        </div>
+
+        <div class="register-form__field">
+            <label class="register-form__field-label">Apellido:</label>
+            <input class="register-form-input-text" formControlName="apellido" type="text" placeholder="Doe">
+            <div *ngIf="registerForm.get('apellido')?.invalid && registerForm.get('apellido')?.touched">
+                El apellido es obligatorio
+            </div>
+        </div>
+
+        <div class="register-form__field">
+            <label class="register-form__field-label">Email:</label>
+            <input class="register-form-input-email" formControlName="email" type="email"
+                placeholder="example@gmail.com">
+            <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+                Debes ingresar un email válido
+            </div>
+        </div>
+
+        <div class="register-form__field">
+            <label class="register-form__field-label">Contraseña:</label>
+            <input class="register-form-input-password" formControlName="contrasena" type="password"
+                placeholder="12345678abc">
+            <div *ngIf="registerForm.get('contrasena')?.invalid && registerForm.get('contrasena')?.touched">
+                La contraseña debe tener al menos 8 caracteres
+            </div>
+        </div>
+
+        <div class="register-form__field" id="rol-section">
+            <label class="register-form__field-label">Rol:</label>
+            <div class="form__field-button-container">
+                <input class="input-radio" type="radio" formControlName="rol" value="jugador">
+                <p>Jugador</p>
+            </div>
+            <div class="form__field-button-container">
+                <input class="input-radio" type="radio" formControlName="rol" value="organizador">
+                <p>Organizador</p>
+            </div>
+            <div class="form__field-button-container">
+                <input class="input-radio" type="radio" formControlName="rol" value="espectador">
+                <p>Espectador</p>
+            </div>
+            <div *ngIf="registerForm.get('rol')?.invalid && registerForm.get('rol')?.touched">
+                Debes seleccionar un rol
+            </div>
+        </div>
+
+        <div class="register-form__field">
+            <label class="register-form__field-label">Fecha de nacimiento:</label>
+            <input class="register-form-input-date" formControlName="fecha_nacimiento" type="date">
+            <div *ngIf="registerForm.get('fecha_nacimiento')?.invalid && registerForm.get('fecha_nacimiento')?.touched">
+                La fecha de nacimiento es obligatoria
+            </div>
+        </div>
+
+        <button class="register-form-button" type="submit" [disabled]="registerForm.invalid">
+            Registrarse
+        </button>
+        <p class="register-form-p">¿Ya tienes una cuenta?</p>
+        <button class="login-form-button" routerLink="/login">Iniciar sesión</button>
+    </form>
+</div>

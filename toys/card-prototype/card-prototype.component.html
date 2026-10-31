@@ -1,0 +1,16 @@
+<div class="wrapper">
+    <div class="primary-section">
+        <div class="button-section">
+            <button class="button" #button><img src="flecha-derecha.png" alt="right-arrow" class="button-icon"></button>
+        </div>
+        <div class="top-section">
+            <img src="tournamentLogo.png" alt="photo" class="tournament-icon">
+        </div>
+    </div>
+    <div class="bottom-section">
+        <p class="bottom-title"><img src="trofeo.png" alt="trophy" class="small-icon"> {{ tournament_name }} </p>
+        <p class="bottom-title"><img src="calendario.png" alt="calendar" class="small-icon"> {{ tournament_date }} </p>
+        <p class="bottom-title"><img src="ubicacion.png" alt="location" class="small-icon"> {{ tournament_place }} </p>
+        <p class="bottom-title" *ngIf="thereIsAPrize"><img src="dinero.png" alt="prize" class="small-icon"> {{ tournament_prize }} </p>
+    </div>
+</div>

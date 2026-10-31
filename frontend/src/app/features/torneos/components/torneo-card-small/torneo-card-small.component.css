@@ -1,0 +1,30 @@
+.torneo-card-small {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    text-align: center;
+    width: 20vw;
+    height: 10vh;
+    gap: 10px;
+    background: transparent;
+    border: 2px solid green;
+    border-radius: 10px;
+    transition: all 0.25s;
+}
+
+.torneo-card-small:hover {
+    transform: translateX(30px);
+    cursor: pointer;
+    background: rgba(0, 128, 0, 0.308);
+}
+
+.torneo-card-small__icon {
+    object-fit: contain;
+    width: 15%;
+    height: 100%;
+}
+
+.torneo-card-small__title {
+    color: white;
+}

@@ -1,0 +1,31 @@
+<div class="torneos">
+    <div class="search-section">
+        <div class="search-section__search-bar">
+            <img src="buscar.png" alt="buscar" class="img">
+            <input type="search" class="search-input" placeholder="Buscá un torneo por nombre...">
+        </div>
+        <div class="search-section__filters">
+            <label for="categorias" class="label">Categoría:</label>
+            <select class="select" name="categorias">
+                <option *ngFor="let c of categorias" [value]="c.nombre"> {{ c.nombre }} </option>
+            </select>
+            <label for="sede" class="label">Sede:</label>
+            <select class="select" name="sede">
+                <option *ngFor="let t of torneos" [value]="t.ubicacion"> {{ t.ubicacion }} </option>
+            </select>
+        </div>
+    </div>
+    <div class="torneos__gestion">
+        <div class="torneos__gestion-resultados">
+            <app-torneo-card-small *ngFor="let t of torneos"
+            [torneo]="t"
+            (torneoSeleccionado)="obtenerTorneoPorId($event)"
+            ></app-torneo-card-small>
+        </div>
+        <div class="torneos__gestion-panel-torneo">
+            <app-torneo-editor *ngIf="torneoSeleccionado"
+            [torneo]="torneoSeleccionado"
+            ></app-torneo-editor>
+        </div>
+    </div>
+</div>

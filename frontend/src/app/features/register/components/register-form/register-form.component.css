@@ -1,0 +1,151 @@
+.register-form-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 100vh;
+    background: url('../../../../../../public/bg-4.jpg') rgba(0, 0, 0, 0.579);
+    background-position: center;
+    background-attachment: fixed;
+    background-blend-mode: darken;
+}
+
+.register-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    justify-self: center;
+    align-self: center;
+    width: 35%;
+    height: 65%;
+    padding: 10px;
+    background: rgba(212, 254, 148, 0.334);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(123, 247, 123, 0.463);
+    border-radius: 10px;
+}
+
+.register-form__header {
+    /* outline: 2px solid red; */
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.register-form__header-button {
+    /* outline: 2px solid yellow; */
+    display: flex;
+    width: 5%;
+}
+
+.register-form__header-main-title {
+    /* outline: 2px solid blue; */
+    display: flex;
+    width: 95%;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.register-form__field {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: start;
+    text-align: center;
+    width: 100%;
+    padding: 10px;
+    gap: 5px;
+}
+
+.form__field-button-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+    flex-grow: 1;
+}
+
+#rol-section {
+    flex-direction: row;
+}
+
+.register-form__field-label {
+    font-size: 1.1rem;
+    color: rgb(0, 24, 0);
+}
+
+.register-form-input-text, .register-form-input-email, .register-form-input-password, .register-form-input-date {
+    padding: 10px;
+    width: 100%;
+    border: 2px solid rgba(123, 247, 123, 0.463);
+    box-shadow: 0 4px 0 0 green;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.393);
+    transition: all 0.25s;
+}
+
+.register-form-input-text::placeholder, .register-form-input-email::placeholder, .register-form-input-password::placeholder {
+    color: rgb(30, 115, 29);
+}
+
+.register-form-input-text:hover, .register-form-input-email:hover, .register-form-input-password:hover, .register-form-input-date:hover {
+    background: rgba(255, 255, 255, 0.789);
+}
+
+.register-form-button {
+    padding: 10px 0;
+    background: rgb(18, 113, 18);
+    border: 2px solid rgb(72, 126, 74);
+    border-radius: 10px;
+    color: white;
+    font-size: 1.1rem;
+    width: 35%;
+    transition: all 0.25s;
+}
+
+.register-form-button:hover {
+    background: rgb(17, 59, 17);
+    cursor: pointer;
+}
+
+.register-form-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.login-form-button {
+    padding: 10px;
+    width: 25%;
+    background: rgba(54, 89, 54, 0.253);
+    border: 2px solid rgb(72, 121, 72);
+    border-radius: 10px;
+    color: rgb(226, 226, 226);
+    transition: all 0.25s;
+}
+
+.login-form-button:hover {
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
+.register-form-main-title {
+    font-size: 1.2rem;
+    margin-right: 5%;
+}
+
+.register-form-p {
+    padding: 10px 0;
+}
+
+.home-button {
+    justify-self: start;
+    font-size: 2rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}

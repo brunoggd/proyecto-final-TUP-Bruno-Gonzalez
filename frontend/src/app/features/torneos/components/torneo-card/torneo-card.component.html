@@ -1,0 +1,18 @@
+<div class="torneo-card">
+    <div class="torneo-card__button-and-logo">
+        <div class="torneo-card__button">
+            <button #button class="button">
+                <img src="flecha-derecha.png" alt="right-arrow" class="button-icon">
+            </button>
+        </div>
+        <div class="torneo-card__logo">
+            <img src="tournamentLogo.png" alt="logo" class="tournament-icon">
+        </div>
+    </div>
+    <div class="torneo-card__info">
+        <p class="bottom-title"><img src="trofeo.png" alt="trophy" class="small-icon"> {{ tournament_name }} </p>
+        <p class="bottom-title"><img src="calendario.png" alt="calendar" class="small-icon"> {{ tournament_date | date: 'shortDate'}} </p>
+        <p class="bottom-title"><img src="ubicacion.png" alt="location" class="small-icon"> {{ tournament_place }} </p>
+        <p class="bottom-title" *ngIf="thereIsAPrize"><img src="dinero.png" alt="prize" class="small-icon"> {{ tournament_prize }} </p>
+    </div>
+</div>
