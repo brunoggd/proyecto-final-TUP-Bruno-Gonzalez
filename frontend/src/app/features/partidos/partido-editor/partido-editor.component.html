@@ -1,0 +1,24 @@
+<div class="partido-editor">
+    <div class="partido-editor__header">
+        <p class="partido-editor__title">Resultados del partido</p>
+    </div>
+    <div class="partido-editor__body">
+        <div class="partido-editor__sets-displayer">
+            <div class="partido-editor__set" *ngFor="let s of partidoSeleccionado">
+                <div class="partido-editor__set-header">
+                    <p class="partido-editor__title"> Set {{ partidoSeleccionado.indexOf(s) + 1 }} </p>
+                    <button class="delete-button" (click)="eliminarSet(s.id_set)">X</button>
+                </div>
+                <div class="partido-editor__games">
+                    <input class="input-number" type="number" min="0" [(ngModel)]="s.games_jugador1">
+                    <span class="span">-</span>
+                    <input class="input-number" type="number" min="0" [(ngModel)]="s.games_jugador2">
+                </div>
+            </div>
+        </div>
+        <div class="partido-editor__actions-section">
+            <button class="confirm-button" (click)="guardarResultado()">Guardar resultado</button>
+            <button class="add-set-button" (click)="agregarSet()">+</button>
+        </div>
+    </div>
+</div>

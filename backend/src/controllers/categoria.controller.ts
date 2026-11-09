@@ -19,6 +19,10 @@ export const getAll = async (_req: Request, res: Response) => {
     res.json(await categoriaModel.findAll());
 };
 
+export const getNames = async (_req: Request, res: Response) => {
+    res.json(await categoriaModel.getNames());
+}
+
 export const getById = async (req: Request<IdParams>, res: Response) => {
     const id = parseId(req.params.id);
     if (!id) {

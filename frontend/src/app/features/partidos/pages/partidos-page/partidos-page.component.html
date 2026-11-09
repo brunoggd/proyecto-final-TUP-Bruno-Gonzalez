@@ -1,1 +1,17 @@
-<p>partidos-page works!</p>
+<div class="partidos">
+    <div class="partidos__displayer" [ngStyle]="{'width' : partidoSeleccionado ? '60%' : '100%'}">
+        <app-partido-card
+        *ngFor="let p of partidos"
+        [partido]="p"
+        (seleccionar)="buscarPartido($event)"
+        ></app-partido-card>
+    </div>
+    <div class="partidos__editor" *ngIf="partidoSeleccionado">
+        <app-partido-editor
+        [partidoSeleccionado]="partidoSeleccionado"
+        (guardar)="guardarResultado($event)"
+        (agregar)="agregarSet()"
+        (eliminar)="eliminarSet($event)"
+        ></app-partido-editor>
+    </div>
+</div>

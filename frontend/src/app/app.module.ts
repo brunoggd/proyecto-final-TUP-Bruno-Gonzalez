@@ -29,6 +29,10 @@ import { LoginPageComponent } from './features/login/pages/login-page/login-page
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TorneoCardSmallComponent } from './features/torneos/components/torneo-card-small/torneo-card-small.component';
 import { TorneoEditorComponent } from './features/torneos/components/torneo-editor/torneo-editor.component';
+import { TorneoEditorCampoComponent } from './features/torneos/components/torneo-editor-campo/torneo-editor-campo.component';
+import { TorneoJugadorInscriptoCardComponent } from './features/torneos/components/torneo-jugador-inscripto-card/torneo-jugador-inscripto-card.component';
+import { PartidoEditorComponent } from './features/partidos/partido-editor/partido-editor.component';
+import { TorneoAltaComponent } from './features/torneos/components/torneo-alta/torneo-alta.component';
 
 @NgModule({
   declarations: [
@@ -55,7 +59,11 @@ import { TorneoEditorComponent } from './features/torneos/components/torneo-edit
     LoginFormComponent,
     LoginPageComponent,
     TorneoCardSmallComponent,
-    TorneoEditorComponent
+    TorneoEditorComponent,
+    TorneoEditorCampoComponent,
+    TorneoJugadorInscriptoCardComponent,
+    PartidoEditorComponent,
+    TorneoAltaComponent
   ],
   imports: [
     BrowserModule,

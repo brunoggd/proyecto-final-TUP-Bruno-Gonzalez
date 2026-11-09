@@ -1,4 +1,5 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Torneo } from '../../../../core/interfaces/torneo.interface';
 
 @Component({
   selector: 'app-torneo-card',
@@ -6,11 +7,7 @@ import { Component, ElementRef, Input, ViewChild } from '@angular/core';
   styleUrl: './torneo-card.component.css'
 })
 export class TorneoCardComponent {
-  @Input() tournament_name!: string;
-  @Input() tournament_date!: string;
-  @Input() tournament_place!: string;
-  @Input() thereIsAPrize!: boolean;
-  @Input() tournament_prize!: number;
+  @Input() torneo!: Torneo;
 
   @ViewChild('button') button!: ElementRef<HTMLButtonElement>;
 

@@ -10,9 +10,9 @@
         </div>
     </div>
     <div class="torneo-card__info">
-        <p class="bottom-title"><img src="trofeo.png" alt="trophy" class="small-icon"> {{ tournament_name }} </p>
-        <p class="bottom-title"><img src="calendario.png" alt="calendar" class="small-icon"> {{ tournament_date | date: 'shortDate'}} </p>
-        <p class="bottom-title"><img src="ubicacion.png" alt="location" class="small-icon"> {{ tournament_place }} </p>
-        <p class="bottom-title" *ngIf="thereIsAPrize"><img src="dinero.png" alt="prize" class="small-icon"> {{ tournament_prize }} </p>
+        <p class="bottom-title"><img src="trofeo.png" alt="trophy" class="small-icon"> {{ torneo.nombre }} </p>
+        <p class="bottom-title"><img src="calendario.png" alt="calendar" class="small-icon"> {{ torneo.fechaInicio| date: 'shortDate'}} </p>
+        <p class="bottom-title"><img src="ubicacion.png" alt="location" class="small-icon"> {{ torneo.ubicacion }} </p>
+        <p class="bottom-title" *ngIf="torneo.montoPremio > 0"><img src="dinero.png" alt="prize" class="small-icon"> {{ torneo.montoPremio }} </p>
     </div>
 </div>

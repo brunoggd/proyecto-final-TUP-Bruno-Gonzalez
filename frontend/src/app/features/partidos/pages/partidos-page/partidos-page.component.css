@@ -1,0 +1,31 @@
+.partidos {
+    display: flex;
+    flex-direction: row;
+    width: 67vw;
+    height: 70vh;
+    flex-grow: 1;
+}
+
+.partidos__displayer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    flex-wrap: wrap;
+    overflow: auto;
+    width: 60%;
+    height: 100%;
+    gap: 10px;
+    padding: 10px 0;
+}
+
+.partidos__editor {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 40%;
+    flex-grow: 1;
+}

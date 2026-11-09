@@ -1,12 +1,13 @@
 .torneo-card-small {
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
     text-align: center;
     width: 20vw;
     height: 10vh;
     gap: 10px;
+    padding: 0 10px;
     background: transparent;
     border: 2px solid green;
     border-radius: 10px;
@@ -14,17 +15,46 @@
 }
 
 .torneo-card-small:hover {
-    transform: translateX(30px);
+    transform: translateX(10px);
     cursor: pointer;
     background: rgba(0, 128, 0, 0.308);
+
+    .torneo-card-small__icon {
+        transform: rotate(-65deg);
+    }
 }
 
 .torneo-card-small__icon {
     object-fit: contain;
     width: 15%;
     height: 100%;
+    transition: all 0.25s;
 }
 
 .torneo-card-small__title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 100%;
     color: white;
+}
+
+.delete-button {
+    padding: 5px 10px;
+    border: none;
+    background: none;
+    color: rgb(255, 40, 40);
+    opacity: 0.5;
+    transition: all 0.25s;
+    font-size: 1.1rem;
+    font-family: 'title-1';
+    font-weight: 700;
+}
+
+.delete-button:hover {
+    opacity: 1;
+    transform: scale(1.25);
+    text-shadow: 0 0 15px rgb(255, 82, 82);
+    cursor: pointer;
 }

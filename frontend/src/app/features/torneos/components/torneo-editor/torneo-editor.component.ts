@@ -1,11 +1,61 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { Torneo } from '../../../../core/interfaces/torneo.interface';
+import { CampoEditado } from '../../../../core/interfaces/campo-editado.interface';
+import { JugadorInscripto } from '../../../../core/interfaces/jugador-inscripto';
+import { PartidoDTO } from '../../../../core/interfaces/partido-dto.interface';
 
 @Component({
   selector: 'app-torneo-editor',
   templateUrl: './torneo-editor.component.html',
   styleUrl: './torneo-editor.component.css'
 })
-export class TorneoEditorComponent {
+export class TorneoEditorComponent implements OnInit, OnChanges {
   @Input() torneo!: Torneo;
+  @Input() jugadoresInscriptos!: JugadorInscripto[];
+  @Input() partidos!: PartidoDTO[];
+
+  torneoEditado!: Torneo;
+
+  @Output() torneoModificado = new EventEmitter<Torneo>();
+  @Output() inscripcionEliminada = new EventEmitter<number>();
+
+  menu: number = 0;
+
+  ngOnInit(): void {
+    this.torneoEditado = { ...this.torneo };
+  }
+
+  ngOnChanges(): void {
+    console.log(
+      'TORNEO NUEVO',
+      this.torneo
+    );
+
+    this.torneoEditado = {
+      ...this.torneo
+    };
+  }
+
+  modificarTorneo(e: CampoEditado): void {
+    this.torneoEditado = {
+      ...this.torneoEditado,
+      [e.campo]: e.valor
+    };
+
+    console.log('TORNEO EDITADO:', this.torneoEditado);
+
+    this.torneoModificado.emit(this.torneoEditado);
+  }
+
+  eliminarInscripcion(id_inscripcion: number): void {
+    this.inscripcionEliminada.emit(id_inscripcion);
+  }
+
+  toggleMenuPartidos(): void {
+    this.menu = 1;
+  }
+
+  toggleMenuTorneo(): void {
+    this.menu = 0;
+  }
 }

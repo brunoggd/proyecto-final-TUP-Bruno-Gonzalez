@@ -7,15 +7,25 @@ export interface Categoria {
     id_torneo: number;
 }
 
+export interface NombreCategoria {
+    nombre: string;
+}
+
 export type CategoriaInput = Omit<Categoria, 'id_categoria'>;
 
 interface CategoriaRow extends RowDataPacket, Categoria {};
+interface NombreCategoriaRow extends RowDataPacket, NombreCategoria {};
 
 export const categoriaModel = {
     async findAll(): Promise<Categoria[]> {
         const [rows] = await pool.query<CategoriaRow[]>(
             'SELECT id_categoria, nombre, id_torneo FROM categorias'
         );
+        return rows;
+    },
+
+    async getNames(): Promise<NombreCategoria[]> {
+        const [rows] = await pool.query<NombreCategoriaRow[]>('SELECT DISTINCT nombre FROM categorias');
         return rows;
     },
 

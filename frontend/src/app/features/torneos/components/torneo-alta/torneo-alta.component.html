@@ -1,0 +1,62 @@
+<div class="torneo-alta">
+    <div class="torneo-alta-options">
+        <button class="back-button" (click)="salirDelMenuAlta()"><img src="volver.png" alt="back" class="img"></button>
+    </div>
+    <form [formGroup]="torneoForm" (ngSubmit)="crearTorneo()" class="torneo-alta-form">
+        <div class="torneo-alta__fields">
+            <div class="torneo-alta__field">
+                <label class="label">Nombre</label>
+                <input class="input-text" type="text" formControlName="nombre" placeholder="Ej: Encuentro Zonal">
+                <span class="error" *ngIf="f.nombre.touched && f.nombre.errors?.['required']">El nombre es
+                    obligatorio</span>
+                <span class="error" *ngIf="f.nombre.touched && f.nombre.errors?.['minlength']">Debe tener al menos 3
+                    caracteres</span>
+            </div>
+            <div class="torneo-alta__field">
+                <label class="label">Ubicación</label>
+                <input class="input-text" type="text" formControlName="ubicacion" placeholder="Ej: Hughes, Santa Fe">
+                <span class="error" *ngIf="f.ubicacion.touched && f.ubicacion.errors?.['required']">La ubicación es
+                    obligatoria</span>
+            </div>
+            <div class="torneo-alta__field">
+                <label class="label">Jugadores</label>
+                <input class="input-number" type="number" min="2" formControlName="jugadores">
+                <span class="error" *ngIf="f.jugadores.touched && f.jugadores.errors?.['required']">Debe indicar la
+                    cantidad
+                    de jugadores</span>
+                <span class="error" *ngIf="f.jugadores.touched && f.jugadores.errors?.['min']">Debe haber al menos 2
+                    jugadores</span>
+            </div>
+            <div class="torneo-alta__field">
+                <label class="label">Premio</label>
+                <input class="input-number" type="number" min="0" formControlName="montoPremio">
+                <span class="error" *ngIf="f.montoPremio.touched && f.montoPremio.errors?.['min']">El premio no puede
+                    ser
+                    negativo</span>
+            </div>
+            <div class="torneo-alta__field">
+                <label class="label">Fecha inicio</label>
+                <input class="input-date" type="date" formControlName="fechaInicio">
+                <span class="error" *ngIf="f.fechaInicio.touched && f.fechaInicio.errors?.['required']">Debe ingresar
+                    una
+                    fecha</span>
+            </div>
+            <div class="torneo-alta__field">
+                <label class="label">Fecha fin</label>
+                <input class="input-date" type="date" formControlName="fechaFin">
+                <span class="error" *ngIf="f.fechaFin.touched && f.fechaFin.errors?.['required']">Debe ingresar una
+                    fecha</span>
+            </div>
+            <div class="torneo-alta__field">
+                <label class="label">Categoria</label>
+                <select class="select" formControlName="categoria">
+                    <option *ngFor="let c of categorias" [value]="c.nombre"> {{ c.nombre }} </option>
+                </select>
+                <span class="error" *ngIf="f.categoria.touched && f.categoria.errors?.['required']">La categoría es obligatoria</span>
+            </div>
+        </div>
+        <div class="torneo-alta__submit-section">
+            <button class="submit-button" type="submit">Crear torneo</button>
+        </div>
+    </form>
+</div>

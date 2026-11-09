@@ -13,10 +13,7 @@ function isPartidoInput(body: any): body is PartidoInput {
         Number.isInteger(body?.id_torneo) && Number(body.id_torneo) > 0 &&
         Number.isInteger(body?.ganador) && Number(body.ganador) > 0 &&
         typeof body?.fecha === 'string' && body.fecha.trim() !== '' &&
-        typeof body?.hora === 'string' && body.hora.trim() !== '' &&
-        typeof body?.resultado === 'string' && body.resultado.trim() !== '' &&
-        Number.isInteger(body?.games) && Number(body.games) > 0 &&
-        Number.isInteger(body?.sets) && Number(body.sets) > 0 
+        typeof body?.hora === 'string' && body.hora.trim() !== ''
     );
 }
 
@@ -26,12 +23,14 @@ export const getAll = async (_req: Request, res: Response) => {
 
 export const getById = async (req: Request<IdParams>, res: Response) => {
     const id = parseId(req.params.id);
+
     if (!id) {
         res.status(400).json({error: 'ID inválido'});
         return;
     }
 
     const partido = await partidoModel.findById(id);
+
     if (!partido) {
         res.status(404).json({error: 'Partido no encontrado'});
         return;
@@ -43,17 +42,20 @@ export const getById = async (req: Request<IdParams>, res: Response) => {
 export const create = async (req: Request, res: Response) => {
     if (!isPartidoInput(req.body)) {
         res.status(400).json({
-            error: 'Datos inválidos, el ID del torneo, ganador, fecha, hora, resultado, games y sets son obligatorios'
+            error: 'Datos inválidos, el ID del torneo, ganador, fecha y hora son obligatorios'
         });
+
         return;
     }
 
     const nuevo = await partidoModel.create(req.body);
+
     res.status(201).json(nuevo);
 };
 
 export const update = async (req: Request<IdParams>, res: Response) => {
     const id = parseId(req.params.id);
+
     if (!id) {
         res.status(400).json({error: 'ID inválido'});
         return;
@@ -65,26 +67,95 @@ export const update = async (req: Request<IdParams>, res: Response) => {
     }
 
     const ok = await partidoModel.update(id, req.body);
+
     if (!ok) {
         res.status(404).json({error: 'Partido no encontrado'});
         return;
     }
 
     res.json({
-        id, ...req.body
+        id,
+        ...req.body
     });
 };
 
 export const remove = async (req: Request<IdParams>, res: Response) => {
     const id = parseId(req.params.id);
+
     if (!id) {
         res.status(400).json({error: 'ID inválido'});
         return;
     }
 
     const ok = await partidoModel.remove(id);
+
     if (!ok) {
         res.status(404).json({error: 'Partido no encontrado'});
+        return;
+    }
+
+    res.status(204).send();
+};
+
+export const getSetsByMatch = async (req: Request<IdParams>,res: Response) => {
+    const id = parseId(req.params.id);
+    if (!id) {
+        res.status(400).json({
+            error: 'ID inválido'
+        });
+        return;
+    }
+    const sets = await partidoModel.findSetsByMatch(id);
+
+    res.json(sets);
+};
+
+export const updateSets = async (req: Request<IdParams>, res: Response) => {
+    const id = parseId(req.params.id);
+    if (!id) {
+        res.status(400).json({
+            error: 'ID inválido'
+        });
+        return;
+    }
+    const ok = await partidoModel.updateSets(id, req.body);
+    if (!ok) {
+        res.status(404).json({
+            error: 'Partido no encontrado'
+        });
+        return;
+    }
+
+    res.status(200).json({mensaje: 'Resultado actualizado'});
+};
+
+export const createSet = async (req: Request<IdParams>, res: Response) => {
+    const id = parseId(req.params.id);
+    if (!id) {
+        res.status(400).json({
+            error: 'ID inválido'
+        });
+        return;
+    }
+
+    const ok = await partidoModel.createSet(id);
+    res.status(ok ? 201 : 400).json({ok});
+};
+
+export const removeSet = async (req: Request<IdParams>, res: Response) => {
+    const id = parseId(req.params.id);
+    if (!id) {
+        res.status(400).json({
+            error: 'ID inválido'
+        });
+        return;
+    }
+
+    const ok = await partidoModel.removeSet(id);
+    if (!ok) {
+        res.status(404).json({
+            error: 'Set no encontrado'
+        });
         return;
     }
 

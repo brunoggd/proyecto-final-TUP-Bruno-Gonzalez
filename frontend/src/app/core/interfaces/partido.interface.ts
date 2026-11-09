@@ -4,7 +4,4 @@ export interface Partido {
     ganador: number;
     fecha: string;
     hora: string;
-    resultado: string;
-    games: number;
-    sets: number;
 }

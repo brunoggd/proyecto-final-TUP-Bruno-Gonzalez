@@ -1,0 +1,27 @@
+1- Hacer los joins necesarios ✓
+    - Persona + Rol
+    - Torneo + Categoría
+    - Jugador ↔ Torneo
+    - Partido ↔ Torneo
+    - Participación ↔ Partido
+    - Ganador ↔ Persona
+
+2- Agregar filtros para todo
+
+3- Agregar el poder modificar la categoría a un torneo desde el editor
+
+4- Crear un componente que reciba el perfil del usuario para mostrarlo
+
+5- Hacer la página de jugadores y la de espectadores (va a ser una copia de la de jugadores pero sin poder inscribirse)
+
+6- Crear funciones para:
+    a- Crear partidos sorteando los inscriptos
+    b- Calcular cruces en base a los resultados
+    c- Determinar el Ganador
+
+    d- Personalizar el estilo del sistema (tema claro y oscuro)
+    e- Cambiar cosas del usuario como nombre, apellido, contraseña, etc
+
+7- Agregar responsividad
+
+8- Mejorar el apartado estético

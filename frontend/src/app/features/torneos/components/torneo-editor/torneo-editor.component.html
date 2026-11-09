@@ -1,19 +1,63 @@
 <div class="torneo-editor">
     <div class="torneo-editor__torneo-name">
+        <button class="back-button" (click)="toggleMenuTorneo()" *ngIf="menu === 1"><img src="volver.png" alt="back" class="img"></button>
         <p class="torneo-name"> {{ torneo.nombre }} </p>
     </div>
-    <div class="torneo-editor__info">
+    <div class="torneo-editor__info" *ngIf="menu === 0">
         <div class="torneo-editor__info-section">
-            <p> {{ torneo.fechaFin | date: 'shortDate' }} </p>
-            <p> {{ torneo.fechaInicio | date: 'shortDate' }} </p>
-            <p> {{ torneo.id_torneo }} </p>
-            <p> {{ torneo.jugadores }} </p>
-            <p> {{ torneo.montoPremio }} </p>
-            <p> {{ torneo.premio }} </p>
-            <p> {{ torneo.ubicacion }} </p>
+            <app-torneo-editor-campo
+            [label]="'Nombre:'"
+            [value]="torneo.nombre"
+            [nombreCampo]="'nombre'"
+            (confirmar)="modificarTorneo($event)"
+            ></app-torneo-editor-campo>
+            <app-torneo-editor-campo
+            [label]="'Fecha de inicio:'"
+            [value]="(torneo.fechaInicio | date: 'yyyy-MM-dd') ?? 'Fecha no encontrada'"
+            [nombreCampo]="'fechaInicio'"
+            (confirmar)="modificarTorneo($event)"
+            ></app-torneo-editor-campo>
+            <app-torneo-editor-campo
+            [label]="'Fecha de fin:'"
+            [value]="(torneo.fechaFin | date: 'yyyy-MM-dd') ?? 'Fecha no encontrada'"
+            [nombreCampo]="'fechaFin'"
+            (confirmar)="modificarTorneo($event)"
+            ></app-torneo-editor-campo>
+            <app-torneo-editor-campo
+            [label]="'Jugadores:'"
+            [value]="torneo.jugadores"
+            [nombreCampo]="'jugadores'"
+            (confirmar)="modificarTorneo($event)"
+            ></app-torneo-editor-campo>
+            <app-torneo-editor-campo
+            [label]="'Premio:'"
+            [value]="torneo.montoPremio"
+            [nombreCampo]="'montoPremio'"
+            (confirmar)="modificarTorneo($event)"
+            ></app-torneo-editor-campo>
+            <app-torneo-editor-campo
+            [label]="'Sede:'"
+            [value]="torneo.ubicacion"
+            [nombreCampo]="'ubicacion'"
+            (confirmar)="modificarTorneo($event)"
+            ></app-torneo-editor-campo>
+            <button class="matches-button" (click)="toggleMenuPartidos()">Ver partidos</button>
         </div>
         <div class="torneo-editor__info-inscriptos">
-            Acá van los inscriptos pero todavía está en construcción
+            <div class="torneo-editor__info-inscriptos--header">
+                <p class="torneo-editor__info-inscriptos--title">Jugadores inscriptos: {{ jugadoresInscriptos.length }} </p>
+            </div>
+            <div class="torneo-editor__info-inscriptos--jugadores">
+                <app-torneo-jugador-inscripto-card
+                *ngFor="let i of jugadoresInscriptos"
+                [jugador]="i"
+                (eliminarJugador)="eliminarInscripcion($event)"
+                ></app-torneo-jugador-inscripto-card>
+            </div>
         </div>
     </div>
+    <app-partidos-page
+    [partidos]="partidos"
+    *ngIf="menu === 1"
+    ></app-partidos-page>
 </div>

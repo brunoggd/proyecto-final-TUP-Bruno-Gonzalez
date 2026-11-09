@@ -69,6 +69,18 @@ html {
     font-weight: 400;
 }
 
+@font-face {
+    font-family: "title-4";
+    src: url("fonts/UbuntuMono-Regular.ttf") format("truetype");
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: "title-5";
+    src: url("fonts/IntelOneMono-VariableFont_wght.ttf") format("truetype");
+    font-weight: 400;
+}
+
 @keyframes fade-in {
     from {
         opacity: 0;

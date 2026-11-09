@@ -12,15 +12,13 @@
     align-items: center;
     text-align: center;
     width: 100%;
-    height: 80vh;
-    /* outline: 2px solid red; */
-    /* transform: scale(0.9); */
+    height: 85vh;
 }
 
 .torneos__gestion-resultados {
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
     text-align: center;
     flex-wrap: wrap;
@@ -32,7 +30,6 @@
     padding: 10px;
     gap: 10px;
     border-right: 2px solid rgb(0, 54, 0);
-    /* background-color: red; */
 }
 
 .torneos__gestion-panel-torneo {
@@ -41,10 +38,13 @@
     justify-content: center;
     align-items: center;
     text-align: center;
+    flex-wrap: wrap;
+    overflow: auto;
     width: 75%;
     height: 100%;
     flex-grow: 1;
-    /* background-color: yellow; */
+    gap: 10px;
+    padding: 10px 0;
 }
 
 .torneos__title {
@@ -58,14 +58,47 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    text-align: center;
     width: 100%;
-    height: 20vh;
+    height: 15vh;
     background: rgba(0, 0, 0, 0.153);
     border-bottom: 2px solid rgb(0, 54, 0);
 }
 
-.search-section__search-bar, .search-section__filters {
+.search-section__search-bar {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    width: 100%;
+    height: 50%;
+    flex-grow: 1;
+    padding: 0 20px;
+}
+
+.search-container {
+    grid-column: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.torneo-alta-button {
+    justify-self: start;
+    padding: 5px 10px;
+    border-radius: 10px;
+    border: 2px solid green;
+    background: rgb(0, 61, 0);
+    color: white;
+    font-size: 1.5rem;
+    transition: all 0.25s;
+}
+
+.torneo-alta-button:hover {
+    background: rgb(0, 101, 0);
+    cursor: pointer;
+}
+
+.search-section__filters {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -79,18 +112,19 @@
 
 .img {
     object-fit: contain;
-    width: 2%;
-    height: 55%;
+    width: 30px;
+    height: 30px;
 }
 
-.search-input, .select {
+.search-input,
+.select {
     padding: 10px;
     border-radius: 10px;
     border: 2px solid greenyellow;
 }
 
 .search-input {
-    width: 50%;
+    width: 500px;
 }
 
 .select {
@@ -101,4 +135,15 @@
     color: white;
     font-family: "title-3";
     font-size: 1.1rem;
+}
+
+.alta-torneos {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    height: 100vh;
+    background: linear-gradient(#001c04, #08270c);
 }

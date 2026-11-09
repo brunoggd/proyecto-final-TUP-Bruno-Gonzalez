@@ -1,31 +1,44 @@
-<div class="torneos">
+<div class="torneos" *ngIf="menu === 0">
     <div class="search-section">
         <div class="search-section__search-bar">
-            <img src="buscar.png" alt="buscar" class="img">
-            <input type="search" class="search-input" placeholder="Buscá un torneo por nombre...">
+            <button class="torneo-alta-button" (click)="toggleMenuAltaTorneo()">+</button>
+            <div class="search-container">
+                <img src="buscar.png" alt="buscar" class="img">
+                <input type="search" class="search-input" placeholder="Buscá un torneo por nombre..." (input)="filtrar()" [(ngModel)]="nombreTorneo">
+            </div>
         </div>
         <div class="search-section__filters">
             <label for="categorias" class="label">Categoría:</label>
-            <select class="select" name="categorias">
+            <select class="select" name="categorias" [(ngModel)]="categoriaSeleccionada" (change)="filtrar()">
+                <option value="">Todas</option>
                 <option *ngFor="let c of categorias" [value]="c.nombre"> {{ c.nombre }} </option>
             </select>
             <label for="sede" class="label">Sede:</label>
-            <select class="select" name="sede">
-                <option *ngFor="let t of torneos" [value]="t.ubicacion"> {{ t.ubicacion }} </option>
+            <select class="select" name="sede" [(ngModel)]="sedeSeleccionada" (change)="filtrar()">
+                <option value="">Todas</option>
+                <option *ngFor="let s of sedes" [value]="s.ubicacion"> {{ s.ubicacion }} </option>
             </select>
         </div>
     </div>
     <div class="torneos__gestion">
         <div class="torneos__gestion-resultados">
-            <app-torneo-card-small *ngFor="let t of torneos"
-            [torneo]="t"
-            (torneoSeleccionado)="obtenerTorneoPorId($event)"
-            ></app-torneo-card-small>
+            <app-torneo-card-small 
+            *ngFor="let t of torneos" [torneo]="t"
+            (torneoSeleccionado)="obtenerTorneo($event)"
+            (eliminar)="eliminarTorneo($event)"></app-torneo-card-small>
         </div>
         <div class="torneos__gestion-panel-torneo">
-            <app-torneo-editor *ngIf="torneoSeleccionado"
-            [torneo]="torneoSeleccionado"
-            ></app-torneo-editor>
+            <app-torneo-editor *ngIf="torneoSeleccionado" [torneo]="torneoSeleccionado"
+                [jugadoresInscriptos]="jugadoresInscriptos" [partidos]="partidos"
+                (torneoModificado)="guardarCambios($event)"
+                (inscripcionEliminada)="eliminarInscripcion($event)"></app-torneo-editor>
         </div>
     </div>
+</div>
+
+<div class="alta-torneos" *ngIf="menu === 1">
+    <app-torneo-alta
+    (crear)="crearTorneo($event)"
+    (salir)="toggleMenuTorneos()"
+    ></app-torneo-alta>
 </div>

@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Categoria } from '../interfaces/categoria.interface';
+import { NombreCategoria } from '../interfaces/nombre-categoria.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,10 @@ export class CategoriaService {
 
   getAll(): Observable<Categoria[]> {
     return this.http.get<Categoria[]>(this.apiUrl);
+  }
+
+  getNames(): Observable<NombreCategoria[]> {
+    return this.http.get<NombreCategoria[]>(`${this.apiUrl}/nombres`);
   }
 
   getById(id: number): Observable<Categoria> {
