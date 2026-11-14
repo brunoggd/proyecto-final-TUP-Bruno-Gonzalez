@@ -1,6 +1,13 @@
 import type { Request, Response } from "express";
 import { torneoModel, type TorneoInput } from "../models/torneo.model";
 
+type RequestConPersona = Request & {
+    persona?: {
+        id: number;
+        rol: string;
+    };
+};
+
 type IdParams = { id: string };
 
 function parseId(value: string): number | null {
@@ -72,7 +79,7 @@ export const getLocations = async (_req: Request, res: Response) => {
     res.json(await torneoModel.getLocations());
 };
 
-export const create = async (req: Request, res: Response) => {
+export const create = async (req: RequestConPersona, res: Response) => {
     if (!isTorneoInput(req.body)) {
         res.status(400).json({
             error: 'Datos inválidos: nombre, ubicación, cantidad de jugadores, monto del premio, fecha de inicio y fecha de fin son obligatorios'
@@ -80,7 +87,15 @@ export const create = async (req: Request, res: Response) => {
         return;
     }
 
-    const nuevo = await torneoModel.create(req.body);
+    if (!req.persona) {
+        res.status(401).json({ error: 'Usuario no autenticado' });
+        return;
+    }
+
+    const nuevo = await torneoModel.create({
+        ...req.body,
+        id_creador: req.persona.id
+    });
 
     res.status(201).json(nuevo);
 };

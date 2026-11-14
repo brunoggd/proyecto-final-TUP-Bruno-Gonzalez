@@ -7,16 +7,14 @@ import { personaModel } from "../models/persona.model";
 import { pool } from '../config/db';
 
 export async function register(req: Request, res: Response) {
-    const { nombre, apellido, contrasena, email, fecha_nacimiento, rol } = req.body;
+    const {nombre, apellido, contrasena, email, fecha_nacimiento, rol} = req.body;
 
     const buscarExistente = await personaModel.findByEmail(email);
+
     if (buscarExistente) {
         return res.status(409).json({error: 'Usuario con este email ya registrado'});
     }
-
     const contrasena_hash = await bcrypt.hash(contrasena, 10);
-    const rows = await personaModel.findAll();
-    const esPrimero: boolean = rows.length === 0;
 
     const personaData = {
         nombre,
@@ -26,19 +24,26 @@ export async function register(req: Request, res: Response) {
         fecha_nacimiento,
         estaJugandoUnTorneo: false,
         torneosGanados: 0,
-        tienePermisosDeOrganizador: esPrimero ? true : false,
-        rol,
+        rol
     };
 
     const persona = await personaModel.create(personaData);
 
     await pool.query(
-        'INSERT INTO roles(nombre, id_persona) VALUES(?, ?)', [rol, persona.id_persona]
+        `INSERT INTO roles(nombre, id_persona) VALUES(?, ?)`, [rol, persona.id_persona]
     );
 
-    res.status(201).json({
-        mensaje: 'Persona registrada correctamente'
-    });
+    const token = jwt.sign(
+        {
+            id: persona.id_persona,
+            rol
+        },
+        process.env.JWT_SECRET as string,
+        { expiresIn: '2h' }
+    );
+
+    res.status(201).json({token});
+
 }
 
 export async function login(req: Request, res: Response) {
@@ -56,11 +61,12 @@ export async function login(req: Request, res: Response) {
             return res.status(401).json('Credenciales inválidas');
         }
 
+        console.log(personaExiste);
+
         const token = jwt.sign(
             {
                 id: personaExiste.id_persona,
-                rol: personaExiste.rol,
-                tienePermisosDeOrganizador: personaExiste.tienePermisosDeOrganizador
+                rol: personaExiste.rol
             },
             process.env.JWT_SECRET as string,
             { expiresIn: '2h' },

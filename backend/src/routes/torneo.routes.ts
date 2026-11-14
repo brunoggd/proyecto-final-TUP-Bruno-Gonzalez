@@ -1,16 +1,20 @@
 import { Router } from "express";
 import * as torneoController from '../controllers/torneo.controller';
 
+import verificarToken from "../middlewares/verificarToken.middleware";
+import autorizarRoles from "../middlewares/autorizarRoles.middleware";
+import esPropietarioDelTorneo from "../middlewares/esPropietarioDelTorneo.middleware";
+
 const router = Router();
 
-router.get('/sedes', torneoController.getLocations);
-router.get('/filtrar', torneoController.filter);
-router.get('/', torneoController.getAll);
-router.get('/jugadores/:id', torneoController.getPlayers);
-router.get('/partidos/:id', torneoController.getMatches);
-router.get('/:id', torneoController.getById);
-router.post('/', torneoController.create);
-router.put('/:id', torneoController.update);
-router.delete('/:id', torneoController.remove);
+router.get('/sedes',            verificarToken, autorizarRoles('organizador'),                          torneoController.getLocations);
+router.get('/filtrar',          verificarToken, autorizarRoles('organizador'),                          torneoController.filter);
+router.get('/',                 verificarToken, autorizarRoles('organizador'),                          torneoController.getAll);
+router.get('/jugadores/:id',    verificarToken, autorizarRoles('organizador'),                          torneoController.getPlayers);
+router.get('/partidos/:id',     verificarToken, autorizarRoles('organizador'),                          torneoController.getMatches);
+router.get('/:id',              verificarToken, autorizarRoles('organizador'),                          torneoController.getById);
+router.post('/',                verificarToken, autorizarRoles('organizador'),                          torneoController.create);
+router.put('/:id',              verificarToken, autorizarRoles('organizador'), esPropietarioDelTorneo,  torneoController.update);
+router.delete('/:id',           verificarToken, autorizarRoles('organizador'), esPropietarioDelTorneo,  torneoController.remove);
 
 export default router;

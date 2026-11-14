@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Torneo } from '../interfaces/torneo.interface';
@@ -13,12 +13,22 @@ export class TorneoService {
   private apiUrl: string = 'http://localhost:3000/api/torneos';
   private http = inject(HttpClient);
 
+  private getHeaders(): HttpHeaders {
+    const token: string | null = sessionStorage.getItem('token') || '';
+    const headers = new HttpHeaders ({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+    // console.log(headers.get('Authorization'));
+    return headers;
+  }
+
   getAll(): Observable<Torneo[]> {
-    return this.http.get<Torneo[]>(this.apiUrl);
+    return this.http.get<Torneo[]>(this.apiUrl, { headers: this.getHeaders() });
   }
 
   getById(id: number): Observable<Torneo> {
-    return this.http.get<Torneo>(`${this.apiUrl}/${id}`);
+    return this.http.get<Torneo>(`${this.apiUrl}/${id}`, { headers: this.getHeaders() });
   }
 
   filtrar(
@@ -41,30 +51,30 @@ export class TorneoService {
       params = params.set('sede', sede);
     }
 
-    return this.http.get<Torneo[]>(`${this.apiUrl}/filtrar`, { params });
+    return this.http.get<Torneo[]>(`${this.apiUrl}/filtrar`, { params, headers: this.getHeaders() });
   }
 
   getSedes(): Observable<SedeTorneo[]> {
-    return this.http.get<SedeTorneo[]>(`${this.apiUrl}/sedes`);
+    return this.http.get<SedeTorneo[]>(`${this.apiUrl}/sedes`, { headers: this.getHeaders() });
   }
 
   create(torneo: Omit<Torneo, 'id_torneo'>): Observable<Torneo> {
-    return this.http.post<Torneo>(this.apiUrl, torneo);
+    return this.http.post<Torneo>(this.apiUrl, torneo, { headers: this.getHeaders() });
   }
 
   update(id: number, torneo: Omit<Torneo, 'id_torneo'>): Observable<Torneo> {
-    return this.http.put<Torneo>(`${this.apiUrl}/${id}`, torneo);
+    return this.http.put<Torneo>(`${this.apiUrl}/${id}`, torneo, { headers: this.getHeaders() });
   }
 
   remove(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    return this.http.delete<void>(`${this.apiUrl}/${id}`, { headers: this.getHeaders() });
   }
 
   getPlayers(id: number): Observable<JugadorInscripto[]> {
-    return this.http.get<JugadorInscripto[]>(`${this.apiUrl}/jugadores/${id}`);
+    return this.http.get<JugadorInscripto[]>(`${this.apiUrl}/jugadores/${id}`, { headers: this.getHeaders() });
   }
 
   getMatches(idTorneo: number) {
-    return this.http.get<PartidoDTO[]>(`${this.apiUrl}/partidos/${idTorneo}`);
+    return this.http.get<PartidoDTO[]>(`${this.apiUrl}/partidos/${idTorneo}`, { headers: this.getHeaders() });
   }
 }

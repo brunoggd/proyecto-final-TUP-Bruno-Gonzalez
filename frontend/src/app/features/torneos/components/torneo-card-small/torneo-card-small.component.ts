@@ -8,6 +8,7 @@ import { Torneo } from '../../../../core/interfaces/torneo.interface';
 })
 export class TorneoCardSmallComponent {
   @Input({required: true}) torneo!: Torneo;
+  @Input() seleccionado!: boolean;
 
   @Output() torneoSeleccionado = new EventEmitter<number>();
   @Output() eliminar = new EventEmitter<number>();

@@ -25,3 +25,13 @@
 7- Agregar responsividad
 
 8- Mejorar el apartado estético
+
+9- Agregar estados de carga y error
+
+10- Meter el middleware esPropietarioOOrganizador a las rutas
+
+--- BUGS A CORREGIR ---
+
+1- Cuando elimino un torneo el editor tiene que desaparecer o volver a la muestra de tarjetas grandes
+
+2- Si no hay torneos no hay categorías, encontrar una forma de que las categorías existan sin depender de torneos

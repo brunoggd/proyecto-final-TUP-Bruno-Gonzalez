@@ -30,7 +30,10 @@ export class LoginFormComponent {
       const login = this.loginForm.value as LoginInfo;
       this.loginService.login(login).subscribe({
         next: (res) => {
-          console.log('Login exitoso, token:', res.token);
+          // console.log('Login exitoso, token:', res.token);
+
+          sessionStorage.setItem('token', res.token);
+          
           this.router.navigate(['/torneos']);
         },
         error: (e: Error) => {

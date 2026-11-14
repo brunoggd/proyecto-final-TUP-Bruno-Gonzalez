@@ -1,14 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { AuthResponse } from '../interfaces/auth-response.interface';
 
 interface Persona {
   email: string;
   contrasena: string;
-}
-
-interface LoginResponse {
-  token: string;
 }
 
 @Injectable({
@@ -19,7 +16,7 @@ export class LoginService {
 
   private http = inject(HttpClient);
 
-  login(p: Persona): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(this.apiUrl, p);
+  login(p: Persona): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(this.apiUrl, p);
   }
 }

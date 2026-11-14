@@ -17,7 +17,7 @@
 .torneo-card-small:hover {
     transform: translateX(10px);
     cursor: pointer;
-    background: rgba(0, 128, 0, 0.308);
+    background: rgba(0, 128, 0, 0.21);
 
     .torneo-card-small__icon {
         transform: rotate(-65deg);
@@ -57,4 +57,13 @@
     transform: scale(1.25);
     text-shadow: 0 0 15px rgb(255, 82, 82);
     cursor: pointer;
+}
+
+.seleccionado {
+    background: rgba(0, 128, 0, 0.453);
+    border-radius: 25px;
+
+    .torneo-card-small__icon {
+        transform: scale(1.2);
+    }
 }

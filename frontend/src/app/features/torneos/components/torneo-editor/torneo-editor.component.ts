@@ -3,6 +3,8 @@ import { Torneo } from '../../../../core/interfaces/torneo.interface';
 import { CampoEditado } from '../../../../core/interfaces/campo-editado.interface';
 import { JugadorInscripto } from '../../../../core/interfaces/jugador-inscripto';
 import { PartidoDTO } from '../../../../core/interfaces/partido-dto.interface';
+import { NombreCategoria } from '../../../../core/interfaces/nombre-categoria.interface';
+import { Categoria } from '../../../../core/interfaces/categoria.interface';
 
 @Component({
   selector: 'app-torneo-editor',
@@ -13,6 +15,11 @@ export class TorneoEditorComponent implements OnInit, OnChanges {
   @Input() torneo!: Torneo;
   @Input() jugadoresInscriptos!: JugadorInscripto[];
   @Input() partidos!: PartidoDTO[];
+
+  @Input() categorias!: NombreCategoria[];
+  @Input() categoriaActual!: Categoria;
+  
+  @Output() categoriaModificada = new EventEmitter<Categoria>();
 
   torneoEditado!: Torneo;
 
@@ -26,23 +33,30 @@ export class TorneoEditorComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(): void {
-    console.log(
-      'TORNEO NUEVO',
-      this.torneo
-    );
+    // console.log('TORNEO NUEVO', this.torneo);
 
     this.torneoEditado = {
       ...this.torneo
     };
+
+    // console.log('Categoría actual:', this.categoriaActual);
   }
 
   modificarTorneo(e: CampoEditado): void {
+    if (e.campo === 'categoria') {
+      this.categoriaActual.nombre = String(e.valor);
+
+      // console.log('CATEGORIA MODIFICADA:', this.categoriaActual);
+      this.categoriaModificada.emit(this.categoriaActual);
+      return;
+    }
+
     this.torneoEditado = {
       ...this.torneoEditado,
       [e.campo]: e.valor
     };
 
-    console.log('TORNEO EDITADO:', this.torneoEditado);
+    // console.log('TORNEO EDITADO:', this.torneoEditado);
 
     this.torneoModificado.emit(this.torneoEditado);
   }

@@ -28,6 +28,7 @@ export class TorneosPageComponent implements OnInit {
   private inscripcionesService = inject(InscripcionService);
 
   torneoSeleccionado!: Torneo;
+  categoriaTorneoSeleccionado!: Categoria;
 
   nombreTorneo: string = '';
   categoriaSeleccionada: string = '';
@@ -63,7 +64,7 @@ export class TorneosPageComponent implements OnInit {
     this.categoriasService.getNames().subscribe({
       next: (data) => {
         this.categorias = data;
-        console.log(this.categorias);
+        // console.log(this.categorias);
       },
       error: (e) => {
         console.error(e);
@@ -79,7 +80,7 @@ export class TorneosPageComponent implements OnInit {
           fechaInicio: data.fechaInicio.split('T')[0],
           fechaFin: data.fechaFin.split('T')[0]
         };
-        console.log(this.torneoSeleccionado);
+        // console.log(this.torneoSeleccionado);
       },
       error: (e) => {
         console.error(e);
@@ -133,6 +134,7 @@ export class TorneosPageComponent implements OnInit {
     this.obtenerTorneoPorId(id);
     this.obtenerJugadoresInscriptos(id);
     this.obtenerPartidosDelTorneo(id);
+    this.obtenerCategoriaTorneoSeleccionado(id);
   }
 
   guardarCambios(t: Torneo): void {
@@ -143,6 +145,15 @@ export class TorneosPageComponent implements OnInit {
     }
 
     this.torneosService.update(t.id_torneo, torneoMod).subscribe();
+  }
+
+  guardarNuevaCategoria(c: Categoria): void {
+    const idCategoria = c.id_categoria;
+    const categoriaNueva: Omit<Categoria, 'id_categoria'> = {
+      nombre: c.nombre,
+      id_torneo: c.id_torneo
+    };
+    this.categoriasService.update(idCategoria, categoriaNueva).subscribe();
   }
 
   eliminarInscripcion(idInscripcion: number): void {
@@ -185,6 +196,18 @@ export class TorneosPageComponent implements OnInit {
       next: () => {
         console.log('Torneo eliminado');
         this.cargarTorneos();
+      },
+      error: (e) => {
+        console.error(e);
+      }
+    });
+  }
+
+  obtenerCategoriaTorneoSeleccionado(id: number): void {
+    this.categoriasService.getById(id).subscribe({
+      next: (c) => {
+        this.categoriaTorneoSeleccionado = c;
+        console.log('CATEGORIA DEL TORNEO SELECCIONADO:', this.categoriaTorneoSeleccionado);
       },
       error: (e) => {
         console.error(e);

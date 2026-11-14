@@ -41,6 +41,14 @@
             [nombreCampo]="'ubicacion'"
             (confirmar)="modificarTorneo($event)"
             ></app-torneo-editor-campo>
+            <app-torneo-editor-campo
+            *ngIf="categoriaActual"
+            [label]="'Categoria:'"
+            [value]="categoriaActual.nombre"
+            [nombreCampo]="'categoria'"
+            [categorias]="categorias"
+            (confirmar)="modificarTorneo($event)"
+            ></app-torneo-editor-campo>
             <button class="matches-button" (click)="toggleMenuPartidos()">Ver partidos</button>
         </div>
         <div class="torneo-editor__info-inscriptos">

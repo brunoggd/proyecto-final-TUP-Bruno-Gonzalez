@@ -1,11 +1,14 @@
 <div class="torneo-card">
     <div class="torneo-card__button-and-logo">
         <div class="torneo-card__button">
-            <button #button class="button">
+            <button #deleteTournamentButton class="button" (click)="eliminarTorneo()">
+                <img src="eliminar-2.png" alt="delete-tournament" class="delete-button-icon">
+            </button>
+            <button #signTournamentButton class="button">
                 <img src="flecha-derecha.png" alt="right-arrow" class="button-icon">
             </button>
         </div>
-        <div class="torneo-card__logo">
+        <div class="torneo-card__logo" (click)="seleccionar()">
             <img src="tournamentLogo.png" alt="logo" class="tournament-icon">
         </div>
     </div>
@@ -13,6 +16,6 @@
         <p class="bottom-title"><img src="trofeo.png" alt="trophy" class="small-icon"> {{ torneo.nombre }} </p>
         <p class="bottom-title"><img src="calendario.png" alt="calendar" class="small-icon"> {{ torneo.fechaInicio| date: 'shortDate'}} </p>
         <p class="bottom-title"><img src="ubicacion.png" alt="location" class="small-icon"> {{ torneo.ubicacion }} </p>
-        <p class="bottom-title" *ngIf="torneo.montoPremio > 0"><img src="dinero.png" alt="prize" class="small-icon"> {{ torneo.montoPremio }} </p>
+        <p class="bottom-title" *ngIf="torneo.montoPremio > 0"><img src="dinero.png" alt="prize" class="small-icon"> ${{ torneo.montoPremio }} </p>
     </div>
 </div>

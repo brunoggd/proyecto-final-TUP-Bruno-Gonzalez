@@ -22,16 +22,37 @@
     </div>
     <div class="torneos__gestion">
         <div class="torneos__gestion-resultados">
-            <app-torneo-card-small 
-            *ngFor="let t of torneos" [torneo]="t"
-            (torneoSeleccionado)="obtenerTorneo($event)"
-            (eliminar)="eliminarTorneo($event)"></app-torneo-card-small>
+            <div *ngFor="let t of torneos">
+                <app-torneo-card-small
+                *ngIf="torneoSeleccionado"
+                [torneo]="t"
+                [seleccionado]="torneoSeleccionado.id_torneo === t.id_torneo"
+                (torneoSeleccionado)="obtenerTorneo($event)"
+                (eliminar)="eliminarTorneo($event)"
+                ></app-torneo-card-small>
+
+                <app-torneo-card
+                *ngIf="!torneoSeleccionado"
+                [torneo]="t"
+                (torneoSeleccionado)="obtenerTorneo($event)"
+                (eliminar)="eliminarTorneo($event)"
+                ></app-torneo-card>
+            </div>
         </div>
-        <div class="torneos__gestion-panel-torneo">
-            <app-torneo-editor *ngIf="torneoSeleccionado" [torneo]="torneoSeleccionado"
-                [jugadoresInscriptos]="jugadoresInscriptos" [partidos]="partidos"
-                (torneoModificado)="guardarCambios($event)"
-                (inscripcionEliminada)="eliminarInscripcion($event)"></app-torneo-editor>
+        <div class="torneos__gestion-panel-torneo" *ngIf="torneoSeleccionado">
+            <app-torneo-editor 
+            *ngIf="torneoSeleccionado"
+            
+            [torneo]="torneoSeleccionado"
+            [jugadoresInscriptos]="jugadoresInscriptos" 
+            [partidos]="partidos"
+            [categorias]="categorias"
+            [categoriaActual]="categoriaTorneoSeleccionado"
+
+            (torneoModificado)="guardarCambios($event)"
+            (categoriaModificada)="guardarNuevaCategoria($event)"
+            (inscripcionEliminada)="eliminarInscripcion($event)"
+            ></app-torneo-editor>
         </div>
     </div>
 </div>

@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { CampoEditado } from '../../../../core/interfaces/campo-editado.interface';
-import { Torneo } from '../../../../core/interfaces/torneo.interface';
+import { CampoEditado, CampoTorneoEditable } from '../../../../core/interfaces/campo-editado.interface';
+import { NombreCategoria } from '../../../../core/interfaces/nombre-categoria.interface';
+import { Categoria } from '../../../../core/interfaces/categoria.interface';
 
 @Component({
   selector: 'app-torneo-editor-campo',
@@ -9,8 +10,10 @@ import { Torneo } from '../../../../core/interfaces/torneo.interface';
 })
 export class TorneoEditorCampoComponent {
   @Input() label!: string;
-  @Input() value!: string | number;
-  @Input() nombreCampo!: keyof Torneo;
+  @Input() value!: string | number | Categoria;
+  @Input() nombreCampo!: CampoTorneoEditable;
+
+  @Input() categorias!: NombreCategoria[];
 
   @Output() confirmar = new EventEmitter<CampoEditado>();
 
@@ -27,6 +30,8 @@ export class TorneoEditorCampoComponent {
       campo: this.nombreCampo,
       valor: this.value
     };
+
+    console.log('CAMPO EDITADO:', campoEditado);
 
     this.confirmar.emit(campoEditado);
   }

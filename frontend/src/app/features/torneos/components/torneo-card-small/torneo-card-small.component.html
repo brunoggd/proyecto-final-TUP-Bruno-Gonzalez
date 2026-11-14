@@ -1,4 +1,4 @@
-<div class="torneo-card-small">
+<div class="torneo-card-small" [ngClass]="{'seleccionado' : seleccionado}">
     <img src="tournamentLogo.png" alt="logo" class="torneo-card-small__icon">
     <p class="torneo-card-small__title" (click)="seleccionar()"> {{ torneo.nombre }} </p>
     <button class="delete-button" (click)="eliminarTorneo()">X</button>

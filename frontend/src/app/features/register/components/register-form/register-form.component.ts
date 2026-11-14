@@ -33,6 +33,9 @@ export class RegisterFormComponent {
       this.registerService.register(persona).subscribe({
         next: (res) => {
           console.log('Registro exitoso:', res, persona);
+
+          sessionStorage.setItem('token', res.token);
+
           this.router.navigate(['/torneos']);
         },
         error: (e) => {

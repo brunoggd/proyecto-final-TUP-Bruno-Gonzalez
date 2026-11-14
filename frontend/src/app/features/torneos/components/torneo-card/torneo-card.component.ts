@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { Torneo } from '../../../../core/interfaces/torneo.interface';
 
 @Component({
@@ -9,11 +9,27 @@ import { Torneo } from '../../../../core/interfaces/torneo.interface';
 export class TorneoCardComponent {
   @Input() torneo!: Torneo;
 
-  @ViewChild('button') button!: ElementRef<HTMLButtonElement>;
+  @ViewChild('deleteTournamentButton') deleteTournamentButton!: ElementRef<HTMLButtonElement>;
+  @ViewChild('signTournamentButton') signTournamentButton!: ElementRef<HTMLButtonElement>;
+
+  @Output() torneoSeleccionado = new EventEmitter<number>();
+  @Output() eliminar = new EventEmitter<number>();
+
+  seleccionar() {
+    this.torneoSeleccionado.emit(this.torneo.id_torneo);
+  }
+
+  eliminarTorneo(): void {
+    this.eliminar.emit(this.torneo.id_torneo);
+  }
 
   ngAfterViewInit() {
-    this.button.nativeElement.addEventListener('click', () => {
-      console.log('El botón funciona ✅');
+    this.deleteTournamentButton.nativeElement.addEventListener('click', () => {
+      console.log('El botón de eliminar torneos funciona ✅');
+    });
+
+    this.signTournamentButton.nativeElement.addEventListener('click', () => {
+      console.log('El botón para anotarse a torneos funciona ✅');
     });
   }
 }
