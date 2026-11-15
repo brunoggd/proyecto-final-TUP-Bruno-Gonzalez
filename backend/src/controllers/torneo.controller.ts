@@ -188,3 +188,13 @@ export const getMatches = async (req: Request<IdParams>, res: Response) => {
 
     res.json(matches);
 };
+
+export const getMine = async (req: RequestConPersona, res: Response) => {
+    if (!req.persona) {
+        return res.status(401).json({error: 'No autenticado'});
+    }
+
+    const torneos = await torneoModel.findByCreator(req.persona.id);
+
+    res.json(torneos);
+};

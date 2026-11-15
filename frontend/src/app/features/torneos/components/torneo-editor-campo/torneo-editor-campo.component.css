@@ -5,11 +5,9 @@
     justify-content: space-between;
     align-items: center;
     text-align: center;
-    width: 35vw;
+    width: 29vw;
     height: 6vh;
     padding: 10px;
-    margin-top: 10px;
-    margin-left: 10px;
     background: green;
     border-radius: 10px;
 }

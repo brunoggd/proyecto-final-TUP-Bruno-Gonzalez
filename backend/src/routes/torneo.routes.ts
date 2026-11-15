@@ -7,6 +7,7 @@ import esPropietarioDelTorneo from "../middlewares/esPropietarioDelTorneo.middle
 
 const router = Router();
 
+router.get('/mis-torneos',      verificarToken, autorizarRoles('organizador'),                          torneoController.getMine);
 router.get('/sedes',            verificarToken, autorizarRoles('organizador'),                          torneoController.getLocations);
 router.get('/filtrar',          verificarToken, autorizarRoles('organizador'),                          torneoController.filter);
 router.get('/',                 verificarToken, autorizarRoles('organizador'),                          torneoController.getAll);

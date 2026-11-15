@@ -10,11 +10,11 @@ export class TorneoCardSmallComponent {
   @Input({required: true}) torneo!: Torneo;
   @Input() seleccionado!: boolean;
 
-  @Output() torneoSeleccionado = new EventEmitter<number>();
+  @Output() torneoSeleccionado = new EventEmitter<Torneo>();
   @Output() eliminar = new EventEmitter<number>();
 
   seleccionar() {
-    this.torneoSeleccionado.emit(this.torneo.id_torneo);
+    this.torneoSeleccionado.emit(this.torneo);
   }
 
   eliminarTorneo(): void {

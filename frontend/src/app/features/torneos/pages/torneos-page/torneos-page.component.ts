@@ -9,6 +9,8 @@ import { PartidoDTO } from '../../../../core/interfaces/partido-dto.interface';
 import { NombreCategoria } from '../../../../core/interfaces/nombre-categoria.interface';
 import { SedeTorneo } from '../../../../core/interfaces/sede-torneo.interface';
 import { TorneoAlta } from '../../../../core/interfaces/torneo-alta.interface';
+import { Observable } from 'rxjs';
+import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-torneos-page',
@@ -27,6 +29,8 @@ export class TorneosPageComponent implements OnInit {
   private categoriasService = inject(CategoriaService);
   private inscripcionesService = inject(InscripcionService);
 
+  private authService = inject(AuthService);
+
   torneoSeleccionado!: Torneo;
   categoriaTorneoSeleccionado!: Categoria;
 
@@ -38,10 +42,20 @@ export class TorneosPageComponent implements OnInit {
 
   menu: number = 0;
 
+  verSoloMisTorneos: boolean = true;
+
+  torneoEditorHabilitado: boolean = false;
+
+  esMiTorneo(torneo: Torneo): boolean {
+    return (torneo.id_creador === this.authService.usuarioId);
+  }
+
   cargarTorneos(): void {
-    this.torneosService.getAll().subscribe({
-      next: (data) => {
-        this.torneos = data;
+    const observableTorneos: Observable<Torneo[]> = this.verSoloMisTorneos ? this.torneosService.getMine() : this.torneosService.getAll();
+
+    observableTorneos.subscribe({
+      next: (d) => {
+        this.torneos = d;
       },
       error: (e) => {
         console.error(e);
@@ -137,6 +151,13 @@ export class TorneosPageComponent implements OnInit {
     this.obtenerCategoriaTorneoSeleccionado(id);
   }
 
+  seleccionarTorneo(torneo: Torneo): void {
+    if (!this.esMiTorneo(torneo)) { return; }
+
+    this.obtenerTorneo(torneo.id_torneo);
+    this.torneoEditorHabilitado = true;
+  }
+
   guardarCambios(t: Torneo): void {
     const torneoMod = {
       ...t,
@@ -144,7 +165,11 @@ export class TorneosPageComponent implements OnInit {
       montoPremio: Number(t.montoPremio)
     }
 
-    this.torneosService.update(t.id_torneo, torneoMod).subscribe();
+    this.torneosService.update(t.id_torneo, torneoMod).subscribe({
+      next: () => {
+        this.refrescarTorneoActual();
+      }
+    });
   }
 
   guardarNuevaCategoria(c: Categoria): void {
@@ -153,15 +178,17 @@ export class TorneosPageComponent implements OnInit {
       nombre: c.nombre,
       id_torneo: c.id_torneo
     };
-    this.categoriasService.update(idCategoria, categoriaNueva).subscribe();
+    this.categoriasService.update(idCategoria, categoriaNueva).subscribe({
+      next: () => {
+        this.refrescarTorneoActual();
+      }
+    });
   }
 
   eliminarInscripcion(idInscripcion: number): void {
     this.inscripcionesService.remove(idInscripcion).subscribe({
       next: () => {
-        this.obtenerJugadoresInscriptos(
-          this.torneoSeleccionado.id_torneo
-        );
+        this.refrescarTorneoActual();
       },
       error: (e) => {
         console.error(e);
@@ -172,7 +199,7 @@ export class TorneosPageComponent implements OnInit {
   crearTorneo(torneo: TorneoAlta): void {
     const categoria: string = torneo.categoria;
 
-    const torneoSinCategoria: Omit<Torneo, 'id_torneo'> = {
+    const torneoSinCategoria: Omit<TorneoAlta, 'categoria'> = {
       nombre: torneo.nombre,
       ubicacion: torneo.ubicacion,
       jugadores: torneo.jugadores,
@@ -215,11 +242,33 @@ export class TorneosPageComponent implements OnInit {
     });
   }
 
+  refrescarTorneoActual(): void {
+    const id = this.torneoSeleccionado.id_torneo;
+
+    this.cargarTorneos();
+
+    this.obtenerTorneoPorId(id);
+    this.obtenerCategoriaTorneoSeleccionado(id);
+    this.obtenerJugadoresInscriptos(id);
+    this.obtenerPartidosDelTorneo(id);
+
+    this.categoriasService.getNames().subscribe({
+      next: (data) => {
+        this.categorias = data;
+      }
+    });
+  }
+
+
   toggleMenuAltaTorneo(): void {
     this.menu = 1;
   }
 
   toggleMenuTorneos(): void {
     this.menu = 0;
+  }
+
+  toggleEditorTorneo(value: boolean): void {
+    this.torneoEditorHabilitado = value;
   }
 }

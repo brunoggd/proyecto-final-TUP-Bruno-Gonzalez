@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
     width: 20vw;
-    height: 45vh;
+    height: 50vh;
     border: 2px solid #1fae1d75;
     border-radius: 11px;
     backdrop-filter: blur(10px);
@@ -27,7 +27,7 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: 70%;
+    height: 60%;
     border-radius: 10px 10px 0 0;
     background: linear-gradient(#42801c5a,#3389345e);
 }
@@ -44,9 +44,10 @@
 
 .torneo-card__logo {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap: 15px;
     width: 100%;
     height: 100%;
 }
@@ -57,8 +58,9 @@
     justify-content: flex-start;
     align-items: center;
     flex-wrap: wrap;
+    overflow: auto;
     width: 100%;
-    height: 30%;
+    height: 40%;
     gap: 15px;
     padding: 10px;
     background: linear-gradient(#22440d89, #1c571d91);
@@ -129,7 +131,22 @@
     transition: all 0.25s;
 }
 
+.advice {
+    color: white;
+    font-size: 1.1rem;
+    font-family: 'title-4';
+}
+
 .small-icon {
     width: 15px;
     height: 15px;
+}
+
+.mi-torneo {
+    border: 2px solid #27F580;
+    
+    .torneo-card__info {
+        border-top: 2px solid #27F580;
+        background: #0f331b;
+    }
 }

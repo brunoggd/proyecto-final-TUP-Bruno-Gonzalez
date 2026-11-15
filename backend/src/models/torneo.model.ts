@@ -208,6 +208,10 @@ export const torneoModel = {
         );
 
         return rows;
-    }
+    },
 
+    async findByCreator(idCreador: number): Promise<Torneo[]> {
+        const [rows] = await pool.query<TorneoRow[]>(`SELECT * FROM torneos WHERE id_creador = ?`, [idCreador]);
+        return rows;
+    },
 };

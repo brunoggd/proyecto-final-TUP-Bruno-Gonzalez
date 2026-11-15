@@ -26,6 +26,8 @@ export class TorneoEditorComponent implements OnInit, OnChanges {
   @Output() torneoModificado = new EventEmitter<Torneo>();
   @Output() inscripcionEliminada = new EventEmitter<number>();
 
+  @Output() volver = new EventEmitter<boolean>();
+
   menu: number = 0;
 
   ngOnInit(): void {
@@ -71,5 +73,9 @@ export class TorneoEditorComponent implements OnInit, OnChanges {
 
   toggleMenuTorneo(): void {
     this.menu = 0;
+  }
+
+  volverAlMostradorDePartidos(): void {
+    this.volver.emit(false);
   }
 }

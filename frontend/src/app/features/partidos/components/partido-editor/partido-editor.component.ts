@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { SetPartido } from '../../../core/interfaces/set-partido.interface';
+import { SetPartido } from '../../../../core/interfaces/set-partido.interface';
 
 @Component({
   selector: 'app-partido-editor',

@@ -18,28 +18,34 @@
                 <option value="">Todas</option>
                 <option *ngFor="let s of sedes" [value]="s.ubicacion"> {{ s.ubicacion }} </option>
             </select>
+            <label for="visualizacionTorneos" class="label">Ver:</label>
+            <select class="select" name="visualizacionTorneos" [(ngModel)]="verSoloMisTorneos" (change)="cargarTorneos()">
+                <option [ngValue]="true">Mis torneos</option>
+                <option [ngValue]="false">Todos los torneos</option>
+            </select>
         </div>
     </div>
     <div class="torneos__gestion">
         <div class="torneos__gestion-resultados">
             <div *ngFor="let t of torneos">
                 <app-torneo-card-small
-                *ngIf="torneoSeleccionado"
+                *ngIf="torneoSeleccionado && torneoEditorHabilitado"
                 [torneo]="t"
                 [seleccionado]="torneoSeleccionado.id_torneo === t.id_torneo"
-                (torneoSeleccionado)="obtenerTorneo($event)"
+                (torneoSeleccionado)="seleccionarTorneo($event)"
                 (eliminar)="eliminarTorneo($event)"
                 ></app-torneo-card-small>
 
                 <app-torneo-card
-                *ngIf="!torneoSeleccionado"
+                *ngIf="!torneoSeleccionado || !torneoEditorHabilitado"
+                [esMiTorneo]="esMiTorneo(t)"
                 [torneo]="t"
-                (torneoSeleccionado)="obtenerTorneo($event)"
+                (torneoSeleccionado)="seleccionarTorneo($event)"
                 (eliminar)="eliminarTorneo($event)"
                 ></app-torneo-card>
             </div>
         </div>
-        <div class="torneos__gestion-panel-torneo" *ngIf="torneoSeleccionado">
+        <div class="torneos__gestion-panel-torneo" *ngIf="torneoSeleccionado && torneoEditorHabilitado">
             <app-torneo-editor 
             *ngIf="torneoSeleccionado"
             
@@ -52,6 +58,7 @@
             (torneoModificado)="guardarCambios($event)"
             (categoriaModificada)="guardarNuevaCategoria($event)"
             (inscripcionEliminada)="eliminarInscripcion($event)"
+            (volver)="toggleEditorTorneo($event)"
             ></app-torneo-editor>
         </div>
     </div>

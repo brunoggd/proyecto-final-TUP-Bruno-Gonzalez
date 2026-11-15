@@ -1,20 +1,21 @@
-<div class="torneo-card">
+<div class="torneo-card" [ngClass]="{'mi-torneo' : esMiTorneo}">
     <div class="torneo-card__button-and-logo">
-        <div class="torneo-card__button">
-            <button #deleteTournamentButton class="button" (click)="eliminarTorneo()">
+        <div class="torneo-card__button" *ngIf="esMiTorneo">
+            <button #deleteTournamentButton class="button" *ngIf="soyOrganizador()" (click)="eliminarTorneo()">
                 <img src="eliminar-2.png" alt="delete-tournament" class="delete-button-icon">
             </button>
-            <button #signTournamentButton class="button">
+            <button #signTournamentButton class="button" *ngIf="soyJugador()">
                 <img src="flecha-derecha.png" alt="right-arrow" class="button-icon">
             </button>
         </div>
         <div class="torneo-card__logo" (click)="seleccionar()">
             <img src="tournamentLogo.png" alt="logo" class="tournament-icon">
+            <p class="advice" *ngIf="esMiTorneo">¡Este torneo es tuyo!</p>
         </div>
     </div>
     <div class="torneo-card__info">
         <p class="bottom-title"><img src="trofeo.png" alt="trophy" class="small-icon"> {{ torneo.nombre }} </p>
-        <p class="bottom-title"><img src="calendario.png" alt="calendar" class="small-icon"> {{ torneo.fechaInicio| date: 'shortDate'}} </p>
+        <p class="bottom-title"><img src="calendario.png" alt="calendar" class="small-icon"> {{ torneo.fechaInicio | date: 'dd/MM/yyyy'}} </p>
         <p class="bottom-title"><img src="ubicacion.png" alt="location" class="small-icon"> {{ torneo.ubicacion }} </p>
         <p class="bottom-title" *ngIf="torneo.montoPremio > 0"><img src="dinero.png" alt="prize" class="small-icon"> ${{ torneo.montoPremio }} </p>
     </div>

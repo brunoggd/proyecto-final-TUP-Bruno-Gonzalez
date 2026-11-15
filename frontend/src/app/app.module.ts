@@ -31,7 +31,7 @@ import { TorneoCardSmallComponent } from './features/torneos/components/torneo-c
 import { TorneoEditorComponent } from './features/torneos/components/torneo-editor/torneo-editor.component';
 import { TorneoEditorCampoComponent } from './features/torneos/components/torneo-editor-campo/torneo-editor-campo.component';
 import { TorneoJugadorInscriptoCardComponent } from './features/torneos/components/torneo-jugador-inscripto-card/torneo-jugador-inscripto-card.component';
-import { PartidoEditorComponent } from './features/partidos/partido-editor/partido-editor.component';
+import { PartidoEditorComponent } from './features/partidos/components/partido-editor/partido-editor.component';
 import { TorneoAltaComponent } from './features/torneos/components/torneo-alta/torneo-alta.component';
 
 @NgModule({

@@ -5,6 +5,7 @@ import { Torneo } from '../interfaces/torneo.interface';
 import { JugadorInscripto } from '../interfaces/jugador-inscripto';
 import { PartidoDTO } from '../interfaces/partido-dto.interface';
 import { SedeTorneo } from '../interfaces/sede-torneo.interface';
+import { TorneoAlta } from '../interfaces/torneo-alta.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -31,12 +32,7 @@ export class TorneoService {
     return this.http.get<Torneo>(`${this.apiUrl}/${id}`, { headers: this.getHeaders() });
   }
 
-  filtrar(
-    nombre?: string,
-    categoria?: string,
-    sede?: string
-  ): Observable<Torneo[]> {
-
+  filtrar(nombre?: string, categoria?: string, sede?: string): Observable<Torneo[]> {
     let params = new HttpParams();
 
     if (nombre) {
@@ -58,7 +54,7 @@ export class TorneoService {
     return this.http.get<SedeTorneo[]>(`${this.apiUrl}/sedes`, { headers: this.getHeaders() });
   }
 
-  create(torneo: Omit<Torneo, 'id_torneo'>): Observable<Torneo> {
+  create(torneo: Omit<TorneoAlta, 'categoria'>): Observable<Torneo> {
     return this.http.post<Torneo>(this.apiUrl, torneo, { headers: this.getHeaders() });
   }
 
@@ -76,5 +72,9 @@ export class TorneoService {
 
   getMatches(idTorneo: number) {
     return this.http.get<PartidoDTO[]>(`${this.apiUrl}/partidos/${idTorneo}`, { headers: this.getHeaders() });
+  }
+
+  getMine(): Observable<Torneo[]> {
+    return this.http.get<Torneo[]>(`${this.apiUrl}/mis-torneos`, { headers: this.getHeaders() });
   }
 }
