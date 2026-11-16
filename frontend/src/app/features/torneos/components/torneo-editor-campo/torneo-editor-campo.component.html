@@ -1,6 +1,10 @@
 <div class="torneo-editor__field">
     <p class="torneo-editor__field--title"> {{ label }} </p>
-    <p class="torneo-editor__field--title" *ngIf="!edit"> {{ nombreCampo === 'montoPremio' ? '$' + value : value }} </p>
+    <p class="torneo-editor__field--title" *ngIf="!edit">
+        {{
+            nombreCampo === 'montoPremio' ? '$' + value : nombreCampo === 'id_categoria' ? nombreCategoria : value
+        }}
+    </p>
 
     <input type="date" class="input" [value]="value"
         *ngIf="edit && (nombreCampo === 'fechaInicio' || nombreCampo === 'fechaFin')" [(ngModel)]="value">
@@ -10,8 +14,8 @@
     <input type="number" class="input" [value]="value"
         *ngIf="edit && (nombreCampo === 'jugadores' || nombreCampo === 'montoPremio')" [(ngModel)]="value">
 
-    <select class="select" *ngIf="edit && (nombreCampo === 'categoria')" [(ngModel)]="value">
-        <option *ngFor="let c of categorias" [value]="c.nombre">{{ c.nombre }}</option>
+    <select class="select" *ngIf="edit && (nombreCampo === 'id_categoria')" [(ngModel)]="value">
+        <option *ngFor="let c of categorias" [ngValue]="c.id_categoria">{{ c.nombre }}</option>
     </select>
 
     <button class="button" (click)="confirm()" *ngIf="edit"><img src="confirmar.png" alt="confirm" class="img"></button>

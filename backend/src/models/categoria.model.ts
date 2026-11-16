@@ -4,7 +4,6 @@ import { pool } from "../config/db";
 export interface Categoria {
     id_categoria: number;
     nombre: string;
-    id_torneo: number;
 }
 
 export interface NombreCategoria {
@@ -19,7 +18,7 @@ interface NombreCategoriaRow extends RowDataPacket, NombreCategoria {};
 export const categoriaModel = {
     async findAll(): Promise<Categoria[]> {
         const [rows] = await pool.query<CategoriaRow[]>(
-            'SELECT id_categoria, nombre, id_torneo FROM categorias'
+            'SELECT id_categoria, nombre FROM categorias'
         );
         return rows;
     },
@@ -31,14 +30,14 @@ export const categoriaModel = {
 
     async findById(id: number): Promise<Categoria | null> {
         const [rows] = await pool.query<CategoriaRow[]>(
-            'SELECT id_categoria, nombre, id_torneo FROM categorias WHERE id_categoria = ?', [id]
+            'SELECT id_categoria, nombre FROM categorias WHERE id_categoria = ?', [id]
         );
         return rows[0] ?? null;
     },
 
     async create(data: CategoriaInput): Promise<Categoria> {
         const [result] = await pool.query<ResultSetHeader>(
-            'INSERT INTO categorias(nombre, id_torneo) VALUES(?, ?)', [data.nombre, data.id_torneo]
+            'INSERT INTO categorias(nombre) VALUES(?)', [data.nombre]
         );
         return {
             id_categoria: result.insertId,
@@ -48,7 +47,7 @@ export const categoriaModel = {
 
     async update(id: number, data: CategoriaInput): Promise<boolean> {
         const [result] = await pool.query<ResultSetHeader>(
-            'UPDATE categorias SET nombre = ?, id_torneo = ? WHERE id_categoria = ?', [data.nombre, data.id_torneo, id]
+            'UPDATE categorias SET nombre = ? WHERE id_categoria = ?', [data.nombre, id]
         );
         return result.affectedRows > 0;
     },
@@ -58,5 +57,20 @@ export const categoriaModel = {
             'DELETE FROM categorias WHERE id_categoria = ?', [id]
         );
         return result.affectedRows > 0;
+    },
+
+    async findByTournament(idTorneo: number): Promise<Categoria | null> {
+        const [rows] = await pool.query<CategoriaRow[]>(
+                `SELECT
+                    c.id_categoria,
+                    c.nombre
+                FROM categorias c
+                INNER JOIN torneos t
+                    ON t.id_categoria = c.id_categoria
+                WHERE t.id_torneo = ?`,
+                [idTorneo]
+            );
+
+        return rows[0] ?? null;
     }
 }

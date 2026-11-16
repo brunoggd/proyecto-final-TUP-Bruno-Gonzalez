@@ -54,11 +54,11 @@ export class TorneoService {
     return this.http.get<SedeTorneo[]>(`${this.apiUrl}/sedes`, { headers: this.getHeaders() });
   }
 
-  create(torneo: Omit<TorneoAlta, 'categoria'>): Observable<Torneo> {
+  create(torneo: TorneoAlta): Observable<Torneo> {
     return this.http.post<Torneo>(this.apiUrl, torneo, { headers: this.getHeaders() });
   }
 
-  update(id: number, torneo: Omit<Torneo, 'id_torneo'>): Observable<Torneo> {
+  update(id: number, torneo: TorneoAlta): Observable<Torneo> {
     return this.http.put<Torneo>(`${this.apiUrl}/${id}`, torneo, { headers: this.getHeaders() });
   }
 

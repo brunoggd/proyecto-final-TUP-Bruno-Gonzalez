@@ -4,6 +4,7 @@ import { pool } from "../config/db";
 export interface Torneo {
     id_torneo: number;
     id_creador: number;
+    id_categoria: number;
     nombre: string;
     ubicacion: string;
     jugadores: number;
@@ -14,6 +15,7 @@ export interface Torneo {
 
 export interface TorneoCreateInput {
     id_creador: number;
+    id_categoria: number;
     nombre: string;
     ubicacion: string;
     jugadores: number;
@@ -51,7 +53,7 @@ export const torneoModel = {
                 t.*
             FROM torneos t
             LEFT JOIN categorias c
-                ON c.id_torneo = t.id_torneo
+                ON c.id_categoria = t.id_categoria
             WHERE 1 = 1`;
 
         const params: string[] = [];
@@ -90,6 +92,7 @@ export const torneoModel = {
                 INSERT INTO torneos
                 (
                     id_creador,
+                    id_categoria,
                     nombre,
                     ubicacion,
                     jugadores,
@@ -98,10 +101,11 @@ export const torneoModel = {
                     fechaFin
                 )
                 VALUES
-                (?, ?, ?, ?, ?, ?, ?)
+                (?, ?, ?, ?, ?, ?, ?, ?)
                 `,
             [
                 data.id_creador,
+                data.id_categoria,
                 data.nombre,
                 data.ubicacion,
                 data.jugadores,
@@ -122,6 +126,7 @@ export const torneoModel = {
             `
                 UPDATE torneos
                 SET
+                    id_categoria = ?,
                     nombre = ?,
                     ubicacion = ?,
                     jugadores = ?,
@@ -131,6 +136,7 @@ export const torneoModel = {
                 WHERE id_torneo = ?
                 `,
             [
+                data.id_categoria,
                 data.nombre,
                 data.ubicacion,
                 data.jugadores,

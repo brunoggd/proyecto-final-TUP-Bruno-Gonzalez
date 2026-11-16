@@ -19,7 +19,7 @@ import { AuthService } from '../../../../core/services/auth.service';
 })
 export class TorneosPageComponent implements OnInit {
   torneos: Torneo[] = [];
-  categorias: NombreCategoria[] = [];
+  categorias: Categoria[] = [];
   sedes: SedeTorneo[] = []
 
   jugadoresInscriptos: JugadorInscripto[] = [];
@@ -63,9 +63,7 @@ export class TorneosPageComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-    this.cargarTorneos();
-
+  cargarSedes(): void {
     this.torneosService.getSedes().subscribe({
       next: (data) => {
         this.sedes = data;
@@ -74,8 +72,13 @@ export class TorneosPageComponent implements OnInit {
         console.error(e);
       }
     });
+  }
 
-    this.categoriasService.getNames().subscribe({
+  ngOnInit(): void {
+    this.cargarTorneos();
+    this.cargarSedes();
+
+    this.categoriasService.getAll().subscribe({
       next: (data) => {
         this.categorias = data;
         // console.log(this.categorias);
@@ -95,6 +98,7 @@ export class TorneosPageComponent implements OnInit {
           fechaFin: data.fechaFin.split('T')[0]
         };
         // console.log(this.torneoSeleccionado);
+        this.obtenerCategoriaTorneoSeleccionado(data.id_categoria);
       },
       error: (e) => {
         console.error(e);
@@ -148,7 +152,6 @@ export class TorneosPageComponent implements OnInit {
     this.obtenerTorneoPorId(id);
     this.obtenerJugadoresInscriptos(id);
     this.obtenerPartidosDelTorneo(id);
-    this.obtenerCategoriaTorneoSeleccionado(id);
   }
 
   seleccionarTorneo(torneo: Torneo): void {
@@ -159,28 +162,23 @@ export class TorneosPageComponent implements OnInit {
   }
 
   guardarCambios(t: Torneo): void {
-    const torneoMod = {
-      ...t,
+    const torneoMod: TorneoAlta = {
+      id_categoria: t.id_categoria,
+      nombre: t.nombre,
+      ubicacion: t.ubicacion,
       jugadores: Number(t.jugadores),
-      montoPremio: Number(t.montoPremio)
-    }
+      montoPremio: Number(t.montoPremio),
+      fechaInicio: t.fechaInicio,
+      fechaFin: t.fechaFin
+    };
 
     this.torneosService.update(t.id_torneo, torneoMod).subscribe({
       next: () => {
         this.refrescarTorneoActual();
-      }
-    });
-  }
-
-  guardarNuevaCategoria(c: Categoria): void {
-    const idCategoria = c.id_categoria;
-    const categoriaNueva: Omit<Categoria, 'id_categoria'> = {
-      nombre: c.nombre,
-      id_torneo: c.id_torneo
-    };
-    this.categoriasService.update(idCategoria, categoriaNueva).subscribe({
-      next: () => {
-        this.refrescarTorneoActual();
+        this.cargarSedes();
+      },
+      error: (e) => {
+        console.error(e);
       }
     });
   }
@@ -197,22 +195,10 @@ export class TorneosPageComponent implements OnInit {
   }
 
   crearTorneo(torneo: TorneoAlta): void {
-    const categoria: string = torneo.categoria;
-
-    const torneoSinCategoria: Omit<TorneoAlta, 'categoria'> = {
-      nombre: torneo.nombre,
-      ubicacion: torneo.ubicacion,
-      jugadores: torneo.jugadores,
-      montoPremio: torneo.montoPremio,
-      fechaInicio: torneo.fechaInicio,
-      fechaFin: torneo.fechaFin
-    };
-
-    this.torneosService.create(torneoSinCategoria).subscribe({
-        next: (nuevoTorneo) => {
-          this.categoriasService.create({nombre: categoria, id_torneo: nuevoTorneo.id_torneo}).subscribe();
-
+    this.torneosService.create(torneo).subscribe({
+        next: () => {
           this.cargarTorneos();
+          this.cargarSedes();
           this.toggleMenuTorneos();
         }
       });
@@ -221,8 +207,10 @@ export class TorneosPageComponent implements OnInit {
   eliminarTorneo(id: number): void {
     this.torneosService.remove(id).subscribe({
       next: () => {
-        console.log('Torneo eliminado');
         this.cargarTorneos();
+        this.cargarSedes();
+
+        console.log('Torneo eliminado');
       },
       error: (e) => {
         console.error(e);
@@ -248,11 +236,10 @@ export class TorneosPageComponent implements OnInit {
     this.cargarTorneos();
 
     this.obtenerTorneoPorId(id);
-    this.obtenerCategoriaTorneoSeleccionado(id);
     this.obtenerJugadoresInscriptos(id);
     this.obtenerPartidosDelTorneo(id);
 
-    this.categoriasService.getNames().subscribe({
+    this.categoriasService.getAll().subscribe({
       next: (data) => {
         this.categorias = data;
       }

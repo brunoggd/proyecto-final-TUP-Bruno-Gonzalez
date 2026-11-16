@@ -49,10 +49,10 @@
             </div>
             <div class="torneo-alta__field">
                 <label class="label">Categoria</label>
-                <select class="select" formControlName="categoria">
-                    <option *ngFor="let c of categorias" [value]="c.nombre"> {{ c.nombre }} </option>
+                <select class="select" formControlName="id_categoria">
+                    <option *ngFor="let c of categorias" [ngValue]="c.id_categoria"> {{ c.nombre }} </option>
                 </select>
-                <span class="error" *ngIf="f.categoria.touched && f.categoria.errors?.['required']">La categoría es obligatoria</span>
+                <span class="error" *ngIf="f.id_categoria.touched && f.id_categoria.errors?.['required']">La categoría es obligatoria</span>
             </div>
         </div>
         <div class="torneo-alta__submit-section">

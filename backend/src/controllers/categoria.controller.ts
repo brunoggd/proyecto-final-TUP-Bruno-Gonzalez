@@ -10,8 +10,7 @@ function parseId(value: string): number | null {
 
 function isCategoriaInput(body: any): body is CategoriaInput {
     return (
-        typeof body?.nombre === 'string' && body.nombre.trim() !== '' && body.nombre.length <= 25 &&
-        Number.isInteger(body?.id_torneo) && Number(body.id_torneo) > 0
+        typeof body?.nombre === 'string' && body.nombre.trim() !== '' && body.nombre.length <= 25
     );
 }
 
@@ -42,7 +41,7 @@ export const getById = async (req: Request<IdParams>, res: Response) => {
 export const create = async (req: Request, res: Response) => {
     if (!isCategoriaInput(req.body)) {
         res.status(400).json({
-            error: 'Datos inválidos, nombre e ID del torneo son obligatorios'
+            error: "Datos inválidos: El nombre de la categoría es obligatorio"
         });
         return;
     }
@@ -70,7 +69,8 @@ export const update = async (req: Request<IdParams>, res: Response) => {
     }
 
     res.json({
-        id, ...req.body
+        id_categoria: id, 
+        ...req.body
     });
 };
 

@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import { Categoria } from '../interfaces/categoria.interface';
 import { NombreCategoria } from '../interfaces/nombre-categoria.interface';
 
+type categoriaInput = Pick<Categoria, 'nombre'>;
+
 @Injectable({
   providedIn: 'root'
 })
@@ -33,11 +35,11 @@ export class CategoriaService {
     return this.http.get<Categoria>(`${this.apiUrl}/${id}`, { headers: this.getHeaders() });
   }
 
-  create(categoria: Omit<Categoria, 'id_categoria'>): Observable<Categoria> {
+  create(categoria: categoriaInput): Observable<Categoria> {
     return this.http.post<Categoria>(this.apiUrl, categoria, { headers: this.getHeaders() });
   }
 
-  update(id: number, categoria: Omit<Categoria, 'id_categoria'>): Observable<Categoria> {
+  update(id: number, categoria: categoriaInput): Observable<Categoria> {
     return this.http.put<Categoria>(`${this.apiUrl}/${id}`, categoria, { headers: this.getHeaders() });
   }
 

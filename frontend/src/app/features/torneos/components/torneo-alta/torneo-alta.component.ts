@@ -4,6 +4,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { CategoriaService } from '../../../../core/services/categoria.service';
 import { NombreCategoria } from '../../../../core/interfaces/nombre-categoria.interface';
 import { TorneoAlta } from '../../../../core/interfaces/torneo-alta.interface';
+import { Categoria } from '../../../../core/interfaces/categoria.interface';
 
 @Component({
   selector: 'app-torneo-alta',
@@ -15,7 +16,7 @@ export class TorneoAltaComponent implements OnInit {
   @Output() salir = new EventEmitter<void>();
 
   private categoriasService = inject(CategoriaService);
-  categorias: NombreCategoria[] = [];
+  categorias: Categoria[] = [];
 
   private fb = inject(FormBuilder);
 
@@ -24,13 +25,13 @@ export class TorneoAltaComponent implements OnInit {
     ubicacion: ['',[Validators.required]],
     jugadores: [16,[Validators.required,Validators.min(2)]],
     montoPremio: [0,[Validators.required,Validators.min(0)]],
-    categoria: ['', [Validators.required]],
+    id_categoria: [0, [Validators.required, Validators.min(1)]],
     fechaInicio: ['',Validators.required],
     fechaFin: ['',Validators.required]
   });
 
   ngOnInit(): void {
-    this.categoriasService.getNames().subscribe({
+    this.categoriasService.getAll().subscribe({
       next: (d) => {
         this.categorias = d;
       },
@@ -56,7 +57,18 @@ export class TorneoAltaComponent implements OnInit {
       return;
     }
 
-    const torneo: TorneoAlta = this.torneoForm.getRawValue() as TorneoAlta;
+    const value = this.torneoForm.getRawValue();
+
+    const torneo: TorneoAlta = {
+      nombre: value.nombre ?? '',
+      ubicacion: value.ubicacion ?? '',
+      jugadores: Number(value.jugadores),
+      montoPremio: Number(value.montoPremio),
+      id_categoria: Number(value.id_categoria),
+      fechaInicio: value.fechaInicio ?? '',
+      fechaFin: value.fechaFin ?? ''
+    };
+    
     this.crear.emit(torneo);
     console.log(torneo);
 

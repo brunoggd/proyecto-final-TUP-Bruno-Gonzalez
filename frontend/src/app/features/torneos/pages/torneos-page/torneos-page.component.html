@@ -21,7 +21,7 @@
             <label for="visualizacionTorneos" class="label">Ver:</label>
             <select class="select" name="visualizacionTorneos" [(ngModel)]="verSoloMisTorneos" (change)="cargarTorneos()">
                 <option [ngValue]="true">Mis torneos</option>
-                <option [ngValue]="false">Todos los torneos</option>
+                <option [ngValue]="false" *ngIf="!torneoEditorHabilitado">Todos los torneos</option>
             </select>
         </div>
     </div>
@@ -29,7 +29,7 @@
         <div class="torneos__gestion-resultados">
             <div *ngFor="let t of torneos">
                 <app-torneo-card-small
-                *ngIf="torneoSeleccionado && torneoEditorHabilitado"
+                *ngIf="torneoSeleccionado && torneoEditorHabilitado && esMiTorneo(t)"
                 [torneo]="t"
                 [seleccionado]="torneoSeleccionado.id_torneo === t.id_torneo"
                 (torneoSeleccionado)="seleccionarTorneo($event)"
@@ -53,10 +53,8 @@
             [jugadoresInscriptos]="jugadoresInscriptos" 
             [partidos]="partidos"
             [categorias]="categorias"
-            [categoriaActual]="categoriaTorneoSeleccionado"
 
             (torneoModificado)="guardarCambios($event)"
-            (categoriaModificada)="guardarNuevaCategoria($event)"
             (inscripcionEliminada)="eliminarInscripcion($event)"
             (volver)="toggleEditorTorneo($event)"
             ></app-torneo-editor>

@@ -17,6 +17,9 @@ function parseId(value: string): number | null {
 
 function isTorneoInput(body: any): body is TorneoInput {
     return (
+        Number.isInteger(Number(body?.id_categoria)) &&
+        Number(body.id_categoria) > 0 &&
+        
         typeof body?.nombre === 'string' &&
         body.nombre.trim() !== '' &&
 
@@ -131,7 +134,7 @@ export const update = async (req: Request<IdParams>, res: Response) => {
     }
 
     res.json({
-        id,
+        id_torneo: id,
         ...req.body
     });
 };

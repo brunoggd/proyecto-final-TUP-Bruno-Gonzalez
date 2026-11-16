@@ -16,10 +16,7 @@ export class TorneoEditorComponent implements OnInit, OnChanges {
   @Input() jugadoresInscriptos!: JugadorInscripto[];
   @Input() partidos!: PartidoDTO[];
 
-  @Input() categorias!: NombreCategoria[];
-  @Input() categoriaActual!: Categoria;
-  
-  @Output() categoriaModificada = new EventEmitter<Categoria>();
+  @Input() categorias!: Categoria[];
 
   torneoEditado!: Torneo;
 
@@ -45,14 +42,6 @@ export class TorneoEditorComponent implements OnInit, OnChanges {
   }
 
   modificarTorneo(e: CampoEditado): void {
-    if (e.campo === 'categoria') {
-      this.categoriaActual.nombre = String(e.valor);
-
-      // console.log('CATEGORIA MODIFICADA:', this.categoriaActual);
-      this.categoriaModificada.emit(this.categoriaActual);
-      return;
-    }
-
     this.torneoEditado = {
       ...this.torneoEditado,
       [e.campo]: e.valor

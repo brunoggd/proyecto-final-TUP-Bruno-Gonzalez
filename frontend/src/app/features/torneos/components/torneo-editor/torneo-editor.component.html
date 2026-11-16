@@ -10,23 +10,33 @@
                 <button class="action-button" (click)="toggleMenuPartidos()">Ver partidos</button>
             </div>
             <div class="torneo-editor__torneo-datos">
-                <app-torneo-editor-campo [label]="'Nombre:'" [value]="torneo.nombre" [nombreCampo]="'nombre'"
-                    (confirmar)="modificarTorneo($event)"></app-torneo-editor-campo>
-                <app-torneo-editor-campo [label]="'Fecha de inicio:'"
-                    [value]="(torneo.fechaInicio | date: 'yyyy-MM-dd') ?? 'Fecha no encontrada'" [nombreCampo]="'fechaInicio'"
-                    (confirmar)="modificarTorneo($event)"></app-torneo-editor-campo>
-                <app-torneo-editor-campo [label]="'Fecha de fin:'"
-                    [value]="(torneo.fechaFin | date: 'yyyy-MM-dd') ?? 'Fecha no encontrada'" [nombreCampo]="'fechaFin'"
-                    (confirmar)="modificarTorneo($event)"></app-torneo-editor-campo>
-                <app-torneo-editor-campo [label]="'Jugadores:'" [value]="torneo.jugadores" [nombreCampo]="'jugadores'"
-                    (confirmar)="modificarTorneo($event)"></app-torneo-editor-campo>
-                <app-torneo-editor-campo [label]="'Premio:'" [value]="torneo.montoPremio" [nombreCampo]="'montoPremio'"
-                    (confirmar)="modificarTorneo($event)"></app-torneo-editor-campo>
-                <app-torneo-editor-campo [label]="'Sede:'" [value]="torneo.ubicacion" [nombreCampo]="'ubicacion'"
-                    (confirmar)="modificarTorneo($event)"></app-torneo-editor-campo>
-                <app-torneo-editor-campo *ngIf="categoriaActual" [label]="'Categoria:'" [value]="categoriaActual.nombre"
-                    [nombreCampo]="'categoria'" [categorias]="categorias"
-                    (confirmar)="modificarTorneo($event)"></app-torneo-editor-campo>
+                <app-torneo-editor-campo [label]="'Nombre:'" [value]="torneoEditado.nombre" [nombreCampo]="'nombre'"
+                    (confirmar)="modificarTorneo($event)">
+                </app-torneo-editor-campo>
+            
+                <app-torneo-editor-campo [label]="'Fecha de inicio:'" [value]="torneoEditado.fechaInicio"
+                    [nombreCampo]="'fechaInicio'" (confirmar)="modificarTorneo($event)">
+                </app-torneo-editor-campo>
+            
+                <app-torneo-editor-campo [label]="'Fecha de fin:'" [value]="torneoEditado.fechaFin" [nombreCampo]="'fechaFin'"
+                    (confirmar)="modificarTorneo($event)">
+                </app-torneo-editor-campo>
+            
+                <app-torneo-editor-campo [label]="'Jugadores:'" [value]="torneoEditado.jugadores" [nombreCampo]="'jugadores'"
+                    (confirmar)="modificarTorneo($event)">
+                </app-torneo-editor-campo>
+            
+                <app-torneo-editor-campo [label]="'Premio:'" [value]="torneoEditado.montoPremio" [nombreCampo]="'montoPremio'"
+                    (confirmar)="modificarTorneo($event)">
+                </app-torneo-editor-campo>
+            
+                <app-torneo-editor-campo [label]="'Sede:'" [value]="torneoEditado.ubicacion" [nombreCampo]="'ubicacion'"
+                    (confirmar)="modificarTorneo($event)">
+                </app-torneo-editor-campo>
+            
+                <app-torneo-editor-campo [label]="'Categoría:'" [value]="torneoEditado.id_categoria" [nombreCampo]="'id_categoria'"
+                    [categorias]="categorias" (confirmar)="modificarTorneo($event)">
+                </app-torneo-editor-campo>
             </div>
         </div>
         <div class="torneo-editor__info-inscriptos">
