@@ -1,0 +1,44 @@
+--- Lista general para agregar paginación --- 
+
+(Por si le quiero meter a otra cosa y no me acuerdo como, igual ante cualquier duda fijarme en todo lo relacionado a TORNEOS en el backend)
+
+Backend
+    1. Definí el contrato de respuesta paginada y compartilo entre los endpoints que necesiten paginación:
+
+    export interface PaginatedResult<T> {
+        data: T[];
+        total: number;
+    }
+
+    2. Elegí los parámetros que recibirá la API. Con limit y offset:
+    - limit: cantidad de elementos por página.
+    - offset: cuántos elementos saltear.
+    - offset = (página - 1) * limit.
+
+    3. Validá los parámetros en el controller. Definí valores predeterminados y un máximo para limit; rechazá valores inválidos. <-- Fijarme en TORNEOS cualquier cosa
+
+    4. Actualizá las consultas del model que devuelven listas:
+    - La consulta principal usa LIMIT y OFFSET.
+    - Una consulta adicional calcula total.
+    - Con filtros, el conteo debe aplicar los mismos filtros.
+    - Agregá un orden estable para que los resultados no cambien de lugar entre páginas.
+
+    5. Devolvé una respuesta uniforme, por ejemplo { data, total }, desde cada endpoint paginado.
+
+Frontend
+    6. Creá el tipo genérico de respuesta para interpretar { data, total }. (El mismo del backend)
+
+    7. Actualizá el servicio para enviar limit y offset y devolver PaginatedResult<TuEntidad>.
+
+    8. Guardá el estado de paginación en la page: página actual, tamaño de página y total de resultados. Calculá el total de páginas con: Math.ceil(total / pageSize)
+
+    9. Al pedir una página, calculá el offset, llamá al servicio y actualizá la lista, el total y la página actual.
+
+    10. Usá un componente de paginación reutilizable que reciba la página actual y el total de páginas, y emita la página solicitada. La page que lo contiene realiza la llamada al servicio.
+
+    11. Conservá filtros y opciones de vista al cambiar de página. Cuando cambien los filtros, empezá de nuevo en la página 1.
+
+Comprobaciones
+    12. Probá la primera página, una página intermedia, la última página parcial, los filtros y el caso sin resultados.
+
+    14. Recordá que los controles de autorización son independientes de la paginación: un 403 indica un problema de permisos, no de limit u offset.
