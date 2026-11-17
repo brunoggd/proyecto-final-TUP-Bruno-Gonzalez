@@ -40,8 +40,49 @@ function isTorneoInput(body: any): body is TorneoInput {
     );
 }
 
-export const getAll = async (_req: Request, res: Response) => {
-    res.json(await torneoModel.findAll());
+// --- NUEVO - COSAS PARA LA PAGINACION ---
+
+const DEFAULT_LIMIT = 10;
+const MAX_LIMIT = 50;
+
+function parseQueryInt(value: unknown): number | null {
+    if (typeof value !== 'string' || !/^\d+$/.test(value)) {
+        return null;
+    }
+
+    const number = Number(value);
+    return Number.isSafeInteger(number) ? number : null;
+}
+
+function getPagination(query: Request['query']) {
+    const limit = query.limit === undefined ? DEFAULT_LIMIT : parseQueryInt(query.limit);
+
+    const offset = query.offset === undefined ? 0 : parseQueryInt(query.offset);
+
+    if (limit === null || limit < 1 || offset === null) {
+        return null;
+    }
+
+    return {
+        limit: Math.min(limit, MAX_LIMIT),
+        offset
+    };
+}
+
+export const getAll = async (req: Request, res: Response) => {
+    const pagination = getPagination(req.query);
+
+    if (!pagination) {
+        res.status(400).json({ error: 'Parámetros de paginación inválidos' });
+        return;
+    }
+
+    const resultado = await torneoModel.findAll(
+        pagination.limit,
+        pagination.offset
+    );
+
+    res.json(resultado);
 };
 
 export const getById = async (req: Request<IdParams>, res: Response) => {
@@ -67,15 +108,28 @@ export const getById = async (req: Request<IdParams>, res: Response) => {
 };
 
 export const filter = async (req: Request, res: Response) => {
+    const pagination = getPagination(req.query);
+
+    if (!pagination) {
+        res.status(400).json({ error: 'Parámetros de paginación inválidos' });
+        return;
+    }
+
     const nombre = typeof req.query.nombre === 'string' ? req.query.nombre : undefined;
 
     const categoria = typeof req.query.categoria === 'string' ? req.query.categoria : undefined;
 
     const sede = typeof req.query.sede === 'string' ? req.query.sede : undefined;
 
-    const torneos = await torneoModel.filter(nombre, categoria, sede);
+    const resultado = await torneoModel.filter(
+        nombre,
+        categoria,
+        sede,
+        pagination.limit,
+        pagination.offset
+    );
 
-    res.json(torneos);
+    res.json(resultado);
 };
 
 export const getLocations = async (_req: Request, res: Response) => {
@@ -194,10 +248,22 @@ export const getMatches = async (req: Request<IdParams>, res: Response) => {
 
 export const getMine = async (req: RequestConPersona, res: Response) => {
     if (!req.persona) {
-        return res.status(401).json({error: 'No autenticado'});
+        res.status(401).json({ error: 'No autenticado' });
+        return;
     }
 
-    const torneos = await torneoModel.findByCreator(req.persona.id);
+    const pagination = getPagination(req.query);
 
-    res.json(torneos);
+    if (!pagination) {
+        res.status(400).json({ error: 'Parámetros de paginación inválidos' });
+        return;
+    }
+
+    const resultado = await torneoModel.findByCreator(
+        req.persona.id,
+        pagination.limit,
+        pagination.offset
+    );
+
+    res.json(resultado);
 };

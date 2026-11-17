@@ -17,7 +17,7 @@ export class PartidoService {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     });
-    console.log(headers.get('Authorization'));
+    // console.log(headers.get('Authorization'));
     return headers;
   }
 

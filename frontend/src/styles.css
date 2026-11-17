@@ -100,3 +100,17 @@ html {
         transform: scale(1);
     }
 }
+
+@keyframes change-1 {
+    25% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(0.85);
+    }
+
+    75% {
+        transform: scale(1);
+    }
+}

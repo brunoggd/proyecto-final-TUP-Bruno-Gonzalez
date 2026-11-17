@@ -1,0 +1,10 @@
+<div class="usuario-card">
+    <img src="usuario.png" alt="user-logo" class="user-img">
+    <p class="usuario-card__title">
+        Hola, {{ authService.nombre }}
+    </p>
+    <div class="rol-ball" [ngClass]="authService.rol"></div>
+    <p class="usuario-card__title" [ngClass]="rol_title">
+        {{ authService.rol === 'organizador' ? 'Organizador' : authService.rol === 'jugador' ? 'Jugador' : authService.rol === 'espectador' ? 'Espectador' : '' }}
+    </p>
+</div>

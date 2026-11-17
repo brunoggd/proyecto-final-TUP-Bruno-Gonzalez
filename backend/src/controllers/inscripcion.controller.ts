@@ -2,6 +2,12 @@ import type { Request, Response } from "express";
 import { inscripcionModel, type InscripcionInput } from "../models/inscripcion.model";
 
 type IdParams = { id: string };
+type RequestConPersona = Request & {
+    persona?: {
+        id: number;
+        rol: string;
+    };
+};
 
 function parseId(value: string): number | null {
     const id = Number(value);
@@ -35,16 +41,46 @@ export const getById = async (req: Request<IdParams>, res: Response) => {
     res.json(inscripcion);
 };
 
-export const create = async (req: Request, res: Response) => {
-    if (!isInscripcionInput(req.body)) {
-        res.status(400).json({
-            error: 'Datos inválidos, tanto el ID de la persona como el del torneo son obligatorios'
-        });
+export const create = async (req: RequestConPersona, res: Response) => {
+    if (!req.persona) {
+        res.status(401).json({ error: 'Usuario no autenticado' });
         return;
     }
 
-    const nuevo = await inscripcionModel.create(req.body);
-    res.status(201).json(nuevo);
+    const idTorneo = parseId(String(req.body?.id_torneo));
+
+    if (!idTorneo) {
+        res.status(400).json({ error: 'ID de torneo inválido' });
+        return;
+    }
+
+    try {
+        const nueva = await inscripcionModel.createIfAvailable(
+            req.persona.id,
+            idTorneo
+        );
+
+        res.status(201).json(nueva);
+    } catch (error) {
+        const code = error instanceof Error ? error.message : '';
+
+        if (code === 'TORNEO_NO_EXISTE') {
+            res.status(404).json({ error: 'Torneo no encontrado' });
+            return;
+        }
+
+        if (code === 'TORNEO_COMPLETO') {
+            res.status(409).json({ error: 'El torneo ya está completo' });
+            return;
+        }
+
+        if (code === 'YA_INSCRIPTO') {
+            res.status(409).json({ error: 'Ya estás inscripto en este torneo' });
+            return;
+        }
+
+        throw error;
+    }
 };
 
 export const update = async (req: Request<IdParams>, res: Response) => {

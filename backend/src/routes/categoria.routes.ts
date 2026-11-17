@@ -7,7 +7,7 @@ import autorizarRoles from "../middlewares/autorizarRoles.middleware";
 const router = Router();
 
 router.get('/nombres',  verificarToken, autorizarRoles('organizador'), categoriaController.getNames);
-router.get('/',         verificarToken, autorizarRoles('organizador'), categoriaController.getAll);
+router.get('/',         verificarToken, autorizarRoles('organizador', 'jugador'), categoriaController.getAll);
 router.get('/:id',      verificarToken, autorizarRoles('organizador'), categoriaController.getById);
 router.post('/',        verificarToken, autorizarRoles('organizador'), categoriaController.create);
 router.put('/:id',      verificarToken, autorizarRoles('organizador'), categoriaController.update);

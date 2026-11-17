@@ -1,0 +1,64 @@
+.usuario-card {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    justify-self: flex-end;
+    text-align: center;
+    width: 65%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid rgba(0, 73, 0, 0.405);
+    background: rgba(0, 58, 0, 0.266);
+    margin-top: 10px;
+}
+
+.user-img {
+    object-fit: contain;
+    width: 13%;
+    height: 100%;
+}
+
+.usuario-card__title {
+    color: white;
+    font-size: 0.9rem;
+    font-family: 'title-3';
+}
+
+.rol-ball {
+    width: 10px;
+    height: 10px;
+    background: white;
+    border-radius: 50%;
+    animation: change-1 2s ease-in-out infinite;
+}
+
+.organizador {
+    background: cyan;
+    box-shadow: 0 0 15px 0 cyan;
+}
+
+.jugador {
+    background: greenyellow;
+    box-shadow: 0 0 15px 0 greenyellow;
+}
+
+.espectador {
+    background: lightgray;
+    box-shadow: 0 0 15px 0 lightgray;
+}
+
+.rol-organizador-title {
+    color: cyan;
+    text-shadow: 0 0 2px cyan;
+}
+
+.rol-jugador-title {
+    color: greenyellow;
+    text-shadow: 0 0 2px greenyellow;
+}
+
+.rol-espectador-title {
+    color: lightgray;
+    text-shadow: 0 0 2px lightgray;
+}

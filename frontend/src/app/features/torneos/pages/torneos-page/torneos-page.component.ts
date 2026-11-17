@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { Torneo } from '../../../../core/interfaces/torneo.interface';
 import { TorneoService } from '../../../../core/services/torneo.service';
 import { Categoria } from '../../../../core/interfaces/categoria.interface';
@@ -42,20 +42,53 @@ export class TorneosPageComponent implements OnInit {
 
   menu: number = 0;
 
-  verSoloMisTorneos: boolean = true;
+  observableTorneos!: Observable<Torneo[]>;
+  verSoloMisTorneos: boolean = false;
 
   torneoEditorHabilitado: boolean = false;
+
+  readonly currentPage = signal(1);
+  readonly total = signal(0);
+  readonly pageSize = 8;
+
+  readonly totalPages = computed(() => Math.ceil(this.total() / this.pageSize));
+
+  private modoConsulta: 'listado' | 'filtro' = 'listado';
 
   esMiTorneo(torneo: Torneo): boolean {
     return (torneo.id_creador === this.authService.usuarioId);
   }
 
-  cargarTorneos(): void {
-    const observableTorneos: Observable<Torneo[]> = this.verSoloMisTorneos ? this.torneosService.getMine() : this.torneosService.getAll();
+  cargarTorneos(page = 1): void {
+    this.modoConsulta = 'listado';
 
-    observableTorneos.subscribe({
-      next: (d) => {
-        this.torneos = d;
+    const offset = (page - 1) * this.pageSize;
+    const resultado$ = this.verSoloMisTorneos ? this.torneosService.getMine(this.pageSize, offset) : this.torneosService.getAll(this.pageSize, offset);
+
+    resultado$.subscribe({
+      next: (response) => {
+        this.torneos = response.data;
+        this.total.set(response.total);
+        this.currentPage.set(page);
+
+        console.log('RESPONSE:', response);
+      },
+      error: (e) => {
+        console.error(e);
+      }
+    });
+  }
+
+  private cargarTorneosFiltrados(page: number): void {
+    this.modoConsulta = 'filtro';
+
+    const offset = (page - 1) * this.pageSize;
+
+    this.torneosService.filtrar(this.nombreTorneo, this.categoriaSeleccionada, this.sedeSeleccionada, this.pageSize,offset).subscribe({
+      next: (response) => {
+        this.torneos = response.data;
+        this.total.set(response.total);
+        this.currentPage.set(page);
       },
       error: (e) => {
         console.error(e);
@@ -110,18 +143,7 @@ export class TorneosPageComponent implements OnInit {
     clearTimeout(this.timeOut);
 
     this.timeOut = setTimeout(() => {
-      this.torneosService.filtrar(
-        this.nombreTorneo,
-        this.categoriaSeleccionada,
-        this.sedeSeleccionada
-      ).subscribe({
-        next: (data) => {
-          this.torneos = data;
-        },
-        error: (e) => {
-          console.error(e);
-        }
-      });
+      this.cargarTorneosFiltrados(1);
     }, 500);
   }
 
@@ -176,6 +198,20 @@ export class TorneosPageComponent implements OnInit {
       next: () => {
         this.refrescarTorneoActual();
         this.cargarSedes();
+      },
+      error: (e) => {
+        console.error(e);
+      }
+    });
+  }
+
+  agregarInscripcion(idTorneo: number): void {
+    this.inscripcionesService.create({
+      id_persona: this.authService.usuarioId!,
+      id_torneo: idTorneo
+    }).subscribe({
+      next: () => {
+        console.log('Inscripción exitosa');
       },
       error: (e) => {
         console.error(e);
@@ -257,5 +293,17 @@ export class TorneosPageComponent implements OnInit {
 
   toggleEditorTorneo(value: boolean): void {
     this.torneoEditorHabilitado = value;
+  }
+
+  soyJugador(): boolean {
+    return this.authService.esJugador();
+  }
+
+  cambiarPagina(page: number): void {
+    if (this.modoConsulta === 'filtro') {
+      this.cargarTorneosFiltrados(page);
+    } else {
+      this.cargarTorneos(page);
+    }
   }
 }

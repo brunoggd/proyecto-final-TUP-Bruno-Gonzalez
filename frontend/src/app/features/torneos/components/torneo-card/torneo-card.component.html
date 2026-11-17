@@ -1,10 +1,10 @@
 <div class="torneo-card" [ngClass]="{'mi-torneo' : esMiTorneo}">
     <div class="torneo-card__button-and-logo">
-        <div class="torneo-card__button" *ngIf="esMiTorneo">
-            <button #deleteTournamentButton class="button" *ngIf="soyOrganizador()" (click)="eliminarTorneo()">
+        <div class="torneo-card__button">
+            <button class="button" (click)="eliminarTorneo()" *ngIf="soyOrganizador() && esMiTorneo">
                 <img src="eliminar-2.png" alt="delete-tournament" class="delete-button-icon">
             </button>
-            <button #signTournamentButton class="button" *ngIf="soyJugador()">
+            <button class="button" (click)="anotarseAlTorneo()" *ngIf="soyJugador()">
                 <img src="flecha-derecha.png" alt="right-arrow" class="button-icon">
             </button>
         </div>

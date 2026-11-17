@@ -16,7 +16,7 @@ export class ParticipacionService {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     });
-    console.log(headers.get('Authorization'));
+    // console.log(headers.get('Authorization'));
     return headers;
   }
 

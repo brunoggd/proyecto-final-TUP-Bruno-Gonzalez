@@ -8,9 +8,9 @@ import esPropietarioDelTorneo from "../middlewares/esPropietarioDelTorneo.middle
 const router = Router();
 
 router.get('/mis-torneos',      verificarToken, autorizarRoles('organizador'),                          torneoController.getMine);
-router.get('/sedes',            verificarToken, autorizarRoles('organizador'),                          torneoController.getLocations);
-router.get('/filtrar',          verificarToken, autorizarRoles('organizador'),                          torneoController.filter);
-router.get('/',                 verificarToken, autorizarRoles('organizador'),                          torneoController.getAll);
+router.get('/sedes',            verificarToken, autorizarRoles('organizador', 'jugador'),                          torneoController.getLocations);
+router.get('/filtrar',          verificarToken, autorizarRoles('organizador', 'jugador'),                          torneoController.filter);
+router.get('/',                 verificarToken, autorizarRoles('organizador', 'jugador'),                          torneoController.getAll);
 router.get('/jugadores/:id',    verificarToken, autorizarRoles('organizador'),                          torneoController.getPlayers);
 router.get('/partidos/:id',     verificarToken, autorizarRoles('organizador'),                          torneoController.getMatches);
 router.get('/:id',              verificarToken, autorizarRoles('organizador'),                          torneoController.getById);

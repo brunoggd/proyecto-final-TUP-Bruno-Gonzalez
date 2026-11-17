@@ -28,6 +28,11 @@ export interface SedeTorneo {
     ubicacion: string;
 }
 
+export interface PaginatedResult<T> {
+    data: T[];
+    total: number;
+}
+
 export type TorneoInput = Omit<Torneo, 'id_torneo' | 'id_creador'>;
 
 interface TorneoRow extends RowDataPacket, Torneo {}
@@ -35,9 +40,19 @@ interface TorneoRow extends RowDataPacket, Torneo {}
 interface SedeTorneoRow extends RowDataPacket, SedeTorneo {}
 
 export const torneoModel = {
-    async findAll(): Promise<Torneo[]> {
-        const [rows] = await pool.query<TorneoRow[]>('SELECT * FROM torneos');
-        return rows;
+    async findAll(limit: number, offset: number): Promise<PaginatedResult<Torneo>> {
+        const [rows] = await pool.query<TorneoRow[]>(
+            `SELECT * FROM torneos ORDER BY id_torneo LIMIT ? OFFSET ?`, [limit, offset]
+        );
+
+        const [countRows] = await pool.query<RowDataPacket[]>(
+            'SELECT COUNT(*) AS total FROM torneos'
+        );
+
+        return {
+            data: rows,
+            total: Number(countRows[0].total)
+        };
     },
 
     async findById(id: number): Promise<Torneo | null> {
@@ -47,37 +62,36 @@ export const torneoModel = {
         return rows[0] ?? null;
     },
 
-    async filter(nombre?: string, categoria?: string, sede?: string) {
-        let sql = `
-            SELECT
-                t.*
-            FROM torneos t
-            LEFT JOIN categorias c
-                ON c.id_categoria = t.id_categoria
-            WHERE 1 = 1`;
+    async filter(nombre?: string, categoria?: string, sede?: string, limit = 10, offset = 0): Promise<PaginatedResult<Torneo>> {
+        let consulta: string = ` FROM torneos t LEFT JOIN categorias c ON c.id_categoria = t.id_categoria WHERE 1 = 1`;
 
-        const params: string[] = [];
+        const params: (string | number)[] = [];
 
         if (nombre) {
-            sql += ` AND t.nombre LIKE ?`;
+            consulta += ` AND t.nombre LIKE ?`;
             params.push(`%${nombre}%`);
         }
 
         if (categoria) {
-            sql += ` AND c.nombre = ?`;
-
+            consulta += ` AND c.nombre = ?`;
             params.push(categoria);
         }
 
         if (sede) {
-            sql += ` AND t.ubicacion = ?`;
-
+            consulta += ` AND t.ubicacion = ?`;
             params.push(sede);
         }
 
-        const [rows] = await pool.query(sql, params);
+        const [rows] = await pool.query<TorneoRow[]>(
+            `SELECT t.* ${consulta} ORDER BY t.id_torneo LIMIT ? OFFSET ?`, [...params, limit, offset]
+        );
 
-        return rows;
+        const [countRows] = await pool.query<RowDataPacket[]>(`SELECT COUNT(*) AS total ${consulta}`, params);
+
+        return {
+            data: rows,
+            total: Number(countRows[0].total)
+        };
     },
 
     async getLocations(): Promise<SedeTorneo[]> {
@@ -216,8 +230,14 @@ export const torneoModel = {
         return rows;
     },
 
-    async findByCreator(idCreador: number): Promise<Torneo[]> {
-        const [rows] = await pool.query<TorneoRow[]>(`SELECT * FROM torneos WHERE id_creador = ?`, [idCreador]);
-        return rows;
+    async findByCreator(idCreador: number, limit = 10, offset = 0): Promise<PaginatedResult<Torneo>> {
+        const [rows] = await pool.query<TorneoRow[]>(`SELECT * FROM torneos WHERE id_creador = ? ORDER BY id_torneo LIMIT ? OFFSET ?`, [idCreador, limit, offset]);
+
+        const [countRows] = await pool.query<RowDataPacket[]>(`SELECT COUNT(*) AS total FROM torneos WHERE id_creador = ?`, [idCreador]);
+
+        return {
+            data: rows,
+            total: Number(countRows[0].total)
+        };
     },
 };

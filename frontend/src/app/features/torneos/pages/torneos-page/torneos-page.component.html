@@ -1,11 +1,12 @@
 <div class="torneos" *ngIf="menu === 0">
     <div class="search-section">
         <div class="search-section__search-bar">
-            <button class="torneo-alta-button" (click)="toggleMenuAltaTorneo()">+</button>
+            <button class="torneo-alta-button" (click)="toggleMenuAltaTorneo()" *ngIf="!soyJugador()">+</button>
             <div class="search-container">
                 <img src="buscar.png" alt="buscar" class="img">
                 <input type="search" class="search-input" placeholder="Buscá un torneo por nombre..." (input)="filtrar()" [(ngModel)]="nombreTorneo">
             </div>
+            <app-usuario-card></app-usuario-card>
         </div>
         <div class="search-section__filters">
             <label for="categorias" class="label">Categoría:</label>
@@ -18,32 +19,44 @@
                 <option value="">Todas</option>
                 <option *ngFor="let s of sedes" [value]="s.ubicacion"> {{ s.ubicacion }} </option>
             </select>
-            <label for="visualizacionTorneos" class="label">Ver:</label>
-            <select class="select" name="visualizacionTorneos" [(ngModel)]="verSoloMisTorneos" (change)="cargarTorneos()">
+            <label for="visualizacionTorneos" class="label" *ngIf="!soyJugador()">Ver:</label>
+            <select class="select" name="visualizacionTorneos" [(ngModel)]="verSoloMisTorneos" (change)="cargarTorneos()" *ngIf="!soyJugador()">
                 <option [ngValue]="true">Mis torneos</option>
                 <option [ngValue]="false" *ngIf="!torneoEditorHabilitado">Todos los torneos</option>
             </select>
         </div>
     </div>
-    <div class="torneos__gestion">
-        <div class="torneos__gestion-resultados">
+    <div class="torneos__gestion" [ngStyle]="{'height': torneoEditorHabilitado ? '85vh' : '75vh'}">
+        <div class="torneos__gestion-resultados" *ngIf="!torneoEditorHabilitado">
             <div *ngFor="let t of torneos">
-                <app-torneo-card-small
-                *ngIf="torneoSeleccionado && torneoEditorHabilitado && esMiTorneo(t)"
-                [torneo]="t"
-                [seleccionado]="torneoSeleccionado.id_torneo === t.id_torneo"
-                (torneoSeleccionado)="seleccionarTorneo($event)"
-                (eliminar)="eliminarTorneo($event)"
-                ></app-torneo-card-small>
-
                 <app-torneo-card
                 *ngIf="!torneoSeleccionado || !torneoEditorHabilitado"
                 [esMiTorneo]="esMiTorneo(t)"
                 [torneo]="t"
                 (torneoSeleccionado)="seleccionarTorneo($event)"
                 (eliminar)="eliminarTorneo($event)"
+                (anotarse)="agregarInscripcion($event)"
                 ></app-torneo-card>
             </div>
+        </div>
+        <div class="torneos_gestion-resultados-small" *ngIf="torneoEditorHabilitado">
+            <div class="torneos_gestion-resultados-small-torneos">
+                <div *ngFor="let t of torneos">
+                    <app-torneo-card-small
+                    *ngIf="torneoSeleccionado && torneoEditorHabilitado && esMiTorneo(t)"
+                    [torneo]="t"
+                    [seleccionado]="torneoSeleccionado.id_torneo === t.id_torneo"
+                    (torneoSeleccionado)="seleccionarTorneo($event)"
+                    (eliminar)="eliminarTorneo($event)"
+                    ></app-torneo-card-small>
+                </div> 
+            </div>
+            <app-pagination 
+            *ngIf="totalPages() > 0 && torneoEditorHabilitado" 
+            [currentPage]="currentPage()" 
+            [totalPages]="totalPages()"
+            (pageChange)="cambiarPagina($event)"
+            ></app-pagination>
         </div>
         <div class="torneos__gestion-panel-torneo" *ngIf="torneoSeleccionado && torneoEditorHabilitado">
             <app-torneo-editor 
@@ -60,6 +73,12 @@
             ></app-torneo-editor>
         </div>
     </div>
+    <app-pagination 
+    *ngIf="totalPages() > 0 && !torneoEditorHabilitado" 
+    [currentPage]="currentPage()" 
+    [totalPages]="totalPages()"
+    (pageChange)="cambiarPagina($event)"
+    ></app-pagination>
 </div>
 
 <div class="alta-torneos" *ngIf="menu === 1">

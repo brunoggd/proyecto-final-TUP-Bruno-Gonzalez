@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 
 export interface UsuarioPayload {
   id: number;
+  nombre: string;
   rol: 'organizador' | 'jugador' | 'espectador';
 }
 
@@ -28,6 +29,10 @@ export class AuthService {
 
   get usuarioId(): number | null {
     return this.payload?.id ?? null;
+  }
+
+  get nombre(): string | null {
+    return this.payload?.nombre ?? null;
   }
 
   get rol(): string | null {

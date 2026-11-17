@@ -33,6 +33,8 @@ import { TorneoEditorCampoComponent } from './features/torneos/components/torneo
 import { TorneoJugadorInscriptoCardComponent } from './features/torneos/components/torneo-jugador-inscripto-card/torneo-jugador-inscripto-card.component';
 import { PartidoEditorComponent } from './features/partidos/components/partido-editor/partido-editor.component';
 import { TorneoAltaComponent } from './features/torneos/components/torneo-alta/torneo-alta.component';
+import { UsuarioCardComponent } from './shared/components/usuario-card/usuario-card.component';
+import { PaginationComponent } from './shared/components/pagination/pagination.component';
 
 @NgModule({
   declarations: [
@@ -63,7 +65,9 @@ import { TorneoAltaComponent } from './features/torneos/components/torneo-alta/t
     TorneoEditorCampoComponent,
     TorneoJugadorInscriptoCardComponent,
     PartidoEditorComponent,
-    TorneoAltaComponent
+    TorneoAltaComponent,
+    UsuarioCardComponent,
+    PaginationComponent
   ],
   imports: [
     BrowserModule,

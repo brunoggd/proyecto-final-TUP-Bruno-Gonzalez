@@ -36,6 +36,7 @@ export async function register(req: Request, res: Response) {
     const token = jwt.sign(
         {
             id: persona.id_persona,
+            nombre: persona.nombre,
             rol
         },
         process.env.JWT_SECRET as string,
@@ -66,6 +67,7 @@ export async function login(req: Request, res: Response) {
         const token = jwt.sign(
             {
                 id: personaExiste.id_persona,
+                nombre: personaExiste.nombre,
                 rol: personaExiste.rol
             },
             process.env.JWT_SECRET as string,

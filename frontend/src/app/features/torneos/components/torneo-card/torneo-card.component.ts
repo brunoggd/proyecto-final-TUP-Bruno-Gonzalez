@@ -11,11 +11,9 @@ export class TorneoCardComponent {
   @Input() torneo!: Torneo;
   @Input() esMiTorneo!: boolean;
 
-  @ViewChild('deleteTournamentButton') deleteTournamentButton!: ElementRef<HTMLButtonElement>;
-  @ViewChild('signTournamentButton') signTournamentButton!: ElementRef<HTMLButtonElement>;
-
   @Output() torneoSeleccionado = new EventEmitter<Torneo>();
   @Output() eliminar = new EventEmitter<number>();
+  @Output() anotarse = new EventEmitter<number>();
 
   private authService = inject(AuthService);
 
@@ -35,17 +33,7 @@ export class TorneoCardComponent {
     this.eliminar.emit(this.torneo.id_torneo);
   }
 
-  ngAfterViewInit() {
-    if (this.esMiTorneo && this.soyOrganizador()) {
-      this.deleteTournamentButton.nativeElement.addEventListener('click', () => {
-        console.log('El botón de eliminar torneos funciona ✅');
-      });
-    }
-
-    if (this.soyJugador()) {
-      this.signTournamentButton.nativeElement.addEventListener('click', () => {
-        console.log('El botón para anotarse a torneos funciona ✅');
-      });
-    }
+  anotarseAlTorneo(): void {
+    this.anotarse.emit(this.torneo.id_torneo);
   }
 }
