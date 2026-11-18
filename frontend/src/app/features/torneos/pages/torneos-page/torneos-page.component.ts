@@ -80,19 +80,29 @@ export class TorneosPageComponent implements OnInit {
   }
 
   private cargarTorneosFiltrados(page: number): void {
-    this.modoConsulta = 'filtro';
-
     const offset = (page - 1) * this.pageSize;
 
-    this.torneosService.filtrar(this.nombreTorneo, this.categoriaSeleccionada, this.sedeSeleccionada, this.pageSize,offset).subscribe({
+    const resultado$ = this.verSoloMisTorneos ? this.torneosService.filtrarMisTorneos(
+      this.nombreTorneo,
+      this.categoriaSeleccionada,
+      this.sedeSeleccionada,
+      this.pageSize,
+      offset
+    ) : this.torneosService.filtrar(
+      this.nombreTorneo,
+      this.categoriaSeleccionada,
+      this.sedeSeleccionada,
+      this.pageSize,
+      offset
+    );
+
+    resultado$.subscribe({
       next: (response) => {
         this.torneos = response.data;
         this.total.set(response.total);
         this.currentPage.set(page);
       },
-      error: (e) => {
-        console.error(e);
-      }
+      error: (e) => console.error(e)
     });
   }
 
@@ -141,6 +151,7 @@ export class TorneosPageComponent implements OnInit {
 
   filtrar(): void {
     clearTimeout(this.timeOut);
+    this.modoConsulta = 'filtro';
 
     this.timeOut = setTimeout(() => {
       this.cargarTorneosFiltrados(1);
@@ -178,6 +189,10 @@ export class TorneosPageComponent implements OnInit {
 
   seleccionarTorneo(torneo: Torneo): void {
     if (!this.esMiTorneo(torneo)) { return; }
+
+    this.verSoloMisTorneos = true;
+    
+    this.cargarTorneos(1);
 
     this.obtenerTorneo(torneo.id_torneo);
     this.torneoEditorHabilitado = true;
@@ -293,6 +308,9 @@ export class TorneosPageComponent implements OnInit {
 
   toggleEditorTorneo(value: boolean): void {
     this.torneoEditorHabilitado = value;
+
+    this.verSoloMisTorneos = !this.verSoloMisTorneos;
+    this.cargarTorneos(1);
   }
 
   soyJugador(): boolean {

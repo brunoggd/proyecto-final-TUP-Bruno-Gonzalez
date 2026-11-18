@@ -62,8 +62,8 @@ export const torneoModel = {
         return rows[0] ?? null;
     },
 
-    async filter(nombre?: string, categoria?: string, sede?: string, limit = 10, offset = 0): Promise<PaginatedResult<Torneo>> {
-        let consulta: string = ` FROM torneos t LEFT JOIN categorias c ON c.id_categoria = t.id_categoria WHERE 1 = 1`;
+    async filter(nombre?: string, categoria?: string, sede?: string, limit = 10, offset = 0, idCreador?: number): Promise<PaginatedResult<Torneo>> {
+        let consulta: string = `FROM torneos t LEFT JOIN categorias c ON c.id_categoria = t.id_categoria WHERE 1 = 1`;
 
         const params: (string | number)[] = [];
 
@@ -80,6 +80,11 @@ export const torneoModel = {
         if (sede) {
             consulta += ` AND t.ubicacion = ?`;
             params.push(sede);
+        }
+
+        if (idCreador !== undefined) {
+            consulta += ` AND t.id_creador = ?`;
+            params.push(idCreador);
         }
 
         const [rows] = await pool.query<TorneoRow[]>(

@@ -10,7 +10,7 @@
 
 3- Agregar el poder modificar la categoría a un torneo desde el editor ✓
 
-4- Crear un componente que reciba el perfil del usuario para mostrarlo
+4- Crear un componente que reciba el perfil del usuario para mostrarlo ✓
 
 5- Hacer la página de jugadores y la de espectadores (va a ser una copia de la de jugadores pero sin poder inscribirse)
 
@@ -28,10 +28,10 @@
 
 9- Agregar estados de carga y error
 
-10- Meter el middleware esPropietarioOOrganizador a las rutas
-
 --- BUGS A CORREGIR ---
 
 1- Cuando elimino un torneo el editor tiene que desaparecer o volver a la muestra de tarjetas grandes ✓
 
 2- Si no hay torneos no hay categorías, encontrar una forma de que las categorías existan sin depender de torneos ✓
+
+3- Si en el editor de torneos filtro los torneos MIOS se añade una página vacía. ✓

@@ -107,11 +107,11 @@ export const getById = async (req: Request<IdParams>, res: Response) => {
     res.json(torneo);
 };
 
-export const filter = async (req: Request, res: Response) => {
+async function ejecutarFiltro(req: RequestConPersona, res: Response, idCreador?: number): Promise<void> {
     const pagination = getPagination(req.query);
 
     if (!pagination) {
-        res.status(400).json({ error: 'Parámetros de paginación inválidos' });
+        res.status(400).json({error: 'Parámetros de paginación inválidos'});
         return;
     }
 
@@ -126,10 +126,24 @@ export const filter = async (req: Request, res: Response) => {
         categoria,
         sede,
         pagination.limit,
-        pagination.offset
+        pagination.offset,
+        idCreador
     );
 
     res.json(resultado);
+}
+
+export const filter = async (req: Request, res: Response) => {
+    await ejecutarFiltro(req, res);
+};
+
+export const filterMine = async (req: RequestConPersona, res: Response) => {
+    if (!req.persona) {
+        res.status(401).json({ error: 'No autenticado' });
+        return;
+    }
+
+    await ejecutarFiltro(req, res, req.persona.id);
 };
 
 export const getLocations = async (_req: Request, res: Response) => {

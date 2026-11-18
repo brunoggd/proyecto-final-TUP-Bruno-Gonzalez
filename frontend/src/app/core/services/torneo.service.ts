@@ -53,6 +53,24 @@ export class TorneoService {
     return this.http.get<PaginatedResult<Torneo>>(`${this.apiUrl}/filtrar`,{ params, headers: this.getHeaders() });
   }
 
+  filtrarMisTorneos(nombre?: string, categoria?: string, sede?: string, limit = 10, offset = 0): Observable<PaginatedResult<Torneo>> {
+    let params = new HttpParams().set('limit', limit).set('offset', offset);
+
+    if (nombre?.trim()) {
+      params = params.set('nombre', nombre.trim());
+    }
+
+    if (categoria?.trim()) {
+      params = params.set('categoria', categoria.trim());
+    }
+    
+    if (sede?.trim()) {
+      params = params.set('sede', sede.trim());
+    }
+
+    return this.http.get<PaginatedResult<Torneo>>(`${this.apiUrl}/mis-torneos/filtrar`, { params, headers: this.getHeaders() });
+  }
+
   getSedes(): Observable<SedeTorneo[]> {
     return this.http.get<SedeTorneo[]>(`${this.apiUrl}/sedes`, { headers: this.getHeaders() });
   }
