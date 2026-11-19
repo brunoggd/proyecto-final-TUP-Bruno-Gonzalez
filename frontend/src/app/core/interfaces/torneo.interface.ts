@@ -5,6 +5,7 @@ export interface Torneo {
     nombre: string;
     ubicacion: string;
     jugadores: number;
+    estado: 'inscripcion_abierta' | 'en_curso' | 'finalizado';
     montoPremio: number;
     fechaInicio: string;
     fechaFin: string;

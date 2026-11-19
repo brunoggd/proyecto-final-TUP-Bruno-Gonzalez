@@ -1,17 +1,27 @@
 <div class="partidos">
-    <div class="partidos__displayer" [ngStyle]="{'width' : partidoSeleccionado ? '60%' : '100%'}">
-        <app-partido-card
-        *ngFor="let p of partidos"
-        [partido]="p"
-        (seleccionar)="buscarPartido($event)"
-        ></app-partido-card>
+    <div class="partidos__displayer" [ngStyle]="{'width': partidoSeleccionado ? '60%' : '100%'}">
+        <div class="partidos__campeon" *ngIf="campeonDelTorneo">Campeón del torneo: {{ campeonDelTorneo }}</div>
+        <section class="partidos__ronda" *ngFor="let numero of numerosRonda">
+            <h3 class="partidos__title">Ronda {{ numero }}</h3>
+            <app-partido-card 
+            *ngFor="let p of partidosDeRonda(numero)" 
+            [partido]="p"
+            [seleccionado]="partidoSeleccionado?.id_partido === p.id_partido" 
+            (seleccionar)="buscarPartido($event)">
+            </app-partido-card>
+        </section>
     </div>
+
     <div class="partidos__editor" *ngIf="partidoSeleccionado">
-        <app-partido-editor
-        [partidoSeleccionado]="partidoSeleccionado"
-        (guardar)="guardarResultado($event)"
-        (agregar)="agregarSet()"
-        (eliminar)="eliminarSet($event)"
-        ></app-partido-editor>
+        <app-partido-editor 
+        [partido]="partidoSeleccionado" 
+        [sets]="setsSeleccionados" 
+        [fechaMinima]="fechaInicioTorneo"
+        [fechaMaxima]="fechaFinTorneo" 
+        (guardarHorario)="guardarHorario($event)"
+        (guardar)="guardarResultado($event)" 
+        (agregar)="agregarSet()" 
+        (eliminar)="eliminarSet($event)">
+        </app-partido-editor>
     </div>
 </div>

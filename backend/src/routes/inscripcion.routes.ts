@@ -9,7 +9,6 @@ const router = Router();
 router.get('/',         verificarToken, autorizarRoles('organizador'),              inscripcionController.getAll);
 router.get('/:id',      verificarToken, autorizarRoles('organizador'),              inscripcionController.getById);
 router.post('/',        verificarToken, autorizarRoles('jugador'),                  inscripcionController.create);
-router.put('/:id',      verificarToken, autorizarRoles('organizador'),              inscripcionController.update);
 router.delete('/:id',   verificarToken, autorizarRoles('organizador', 'jugador'),   inscripcionController.remove);
 
 export default router;

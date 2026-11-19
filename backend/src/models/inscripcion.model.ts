@@ -7,8 +7,6 @@ export interface Inscripcion {
     id_torneo: number;
 }
 
-export type InscripcionInput = Omit<Inscripcion, 'id_inscripcion'>;
-
 interface InscripcionRow extends RowDataPacket, Inscripcion {}
 
 export const inscripcionModel = {
@@ -49,30 +47,33 @@ export const inscripcionModel = {
             await connection.beginTransaction();
 
             const [torneos] = await connection.query<RowDataPacket[]>(
-                `SELECT jugadores FROM torneos WHERE id_torneo = ? FOR UPDATE`,
-                [idTorneo]
+                `SELECT jugadores, estado FROM torneos WHERE id_torneo = ? FOR UPDATE`, [idTorneo]
             );
 
             if (torneos.length === 0) {
                 throw new Error('TORNEO_NO_EXISTE');
             }
 
-            const [inscripciones] = await connection.query<RowDataPacket[]>(
-                `SELECT COUNT(*) AS total FROM inscripciones WHERE id_torneo = ?`,
-                [idTorneo]
-            );
-
-            if (Number(inscripciones[0].total) >= Number(torneos[0].jugadores)) {
-                throw new Error('TORNEO_COMPLETO');
+            if (torneos[0].estado !== 'inscripcion_abierta') {
+                throw new Error('INSCRIPCION_CERRADA');
             }
 
+            const capacidad = Number(torneos[0].jugadores);
+
             const [duplicada] = await connection.query<RowDataPacket[]>(
-                `SELECT 1 FROM inscripciones WHERE id_persona = ? AND id_torneo = ? LIMIT 1`,
-                [idPersona, idTorneo]
+                `SELECT 1 FROM inscripciones WHERE id_persona = ? AND id_torneo = ? LIMIT 1`, [idPersona, idTorneo]
             );
 
             if (duplicada.length > 0) {
                 throw new Error('YA_INSCRIPTO');
+            }
+
+            const [inscripciones] = await connection.query<RowDataPacket[]>(
+                `SELECT COUNT(*) AS total FROM inscripciones WHERE id_torneo = ?`, [idTorneo]
+            );
+
+            if (Number(inscripciones[0].total) >= capacidad) {
+                throw new Error('TORNEO_COMPLETO');
             }
 
             const [result] = await connection.query<ResultSetHeader>(
@@ -90,23 +91,56 @@ export const inscripcionModel = {
         } catch (error) {
             await connection.rollback();
             throw error;
-            
+
         } finally {
             connection.release();
         }
     },
-    
-    async update(id: number, data: InscripcionInput): Promise<boolean> {
-        const [result] = await pool.query<ResultSetHeader>(
-            'UPDATE inscripciones SET id_persona = ?, id_torneo = ? WHERE id_inscripcion = ?', [data.id_persona, data.id_torneo, id]
-        );
-        return result.affectedRows > 0;
-    },
 
-    async remove(id: number): Promise<boolean> {
-        const [result] = await pool.query<ResultSetHeader>(
-            'DELETE FROM inscripciones WHERE id_inscripcion = ?', [id]
-        );
-        return result.affectedRows > 0;
-    }
+    async removeIfRegistrationOpen(id: number): Promise<'NO_ENCONTRADO' | 'INSCRIPCION_CERRADA' | 'INSCRIPCION_ELIMINADA'> {
+        const connection = await pool.getConnection();
+
+        try {
+            await connection.beginTransaction();
+
+            const [inscripciones] = await connection.query<RowDataPacket[]>(
+                `SELECT id_torneo FROM inscripciones WHERE id_inscripcion = ?`, [id]
+            );
+
+            if (inscripciones.length === 0) {
+                await connection.rollback();
+                return 'NO_ENCONTRADO';
+            }
+
+            const idTorneo = Number(inscripciones[0].id_torneo);
+
+            const [torneos] = await connection.query<RowDataPacket[]>(
+                `SELECT estado FROM torneos WHERE id_torneo = ? FOR UPDATE`, [idTorneo]
+            );
+
+            if (torneos.length === 0 || torneos[0].estado !== 'inscripcion_abierta') {
+                await connection.rollback();
+                return 'INSCRIPCION_CERRADA';
+            }
+
+            const [result] = await connection.query<ResultSetHeader>(
+                `DELETE FROM inscripciones WHERE id_inscripcion = ?`, [id]
+            );
+
+            if (result.affectedRows === 0) {
+                await connection.rollback();
+                return 'NO_ENCONTRADO';
+            }
+
+            await connection.commit();
+            return 'INSCRIPCION_ELIMINADA';
+
+        } catch (error) {
+            await connection.rollback();
+            throw error;
+
+        } finally {
+            connection.release();
+        }
+    },
 }

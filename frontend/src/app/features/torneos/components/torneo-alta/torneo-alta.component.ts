@@ -74,9 +74,13 @@ export class TorneoAltaComponent implements OnInit {
 
     this.torneoForm.reset({
       jugadores: 16,
-      montoPremio: 0
+      montoPremio: 0,
+      id_categoria: 1,
+      nombre: '',
+      ubicacion: '',
+      fechaInicio: '',
+      fechaFin: ''
     });
-
   }
 
   get f() {

@@ -1,5 +1,4 @@
 .torneo-editor__field {
-    /* outline: 2px solid yellow; */
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -8,6 +7,7 @@
     width: 29vw;
     height: 6vh;
     padding: 10px;
+    gap: 15px;
     background: green;
     border-radius: 10px;
 }

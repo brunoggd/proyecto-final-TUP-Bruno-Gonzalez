@@ -32,10 +32,6 @@ export class InscripcionService {
     return this.http.post<Inscripcion>(this.apiUrl, inscripcion, { headers: this.getHeaders() });
   }
 
-  update(id: number, inscripcion: Omit<Inscripcion, 'id_inscripcion'>): Observable<Inscripcion> {
-    return this.http.put<Inscripcion>(`${this.apiUrl}/${id}`, inscripcion, { headers: this.getHeaders() });
-  }
-
   remove(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`, { headers: this.getHeaders() });
   }

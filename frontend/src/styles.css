@@ -107,10 +107,24 @@ html {
     }
 
     50% {
-        transform: scale(0.85);
+        transform: scale(0.67);
     }
 
     75% {
         transform: scale(1);
+    }
+}
+
+@keyframes yellow-glow {
+    25% {
+        box-shadow: 0 0 0 0 yellow;
+    }
+
+    50% {
+        box-shadow: 0 0 5px 0 yellow;
+    }
+
+    75% {
+        box-shadow: 0 0 0 0 yellow;
     }
 }

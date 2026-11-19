@@ -15,9 +15,9 @@
 5- Hacer la página de jugadores y la de espectadores (va a ser una copia de la de jugadores pero sin poder inscribirse)
 
 6- Crear funciones para:
-    a- Crear partidos sorteando los inscriptos
-    b- Calcular cruces en base a los resultados
-    c- Determinar el Ganador
+    a- Crear partidos sorteando los inscriptos ✓
+    b- Calcular cruces en base a los resultados ✓
+    c- Determinar el Ganador ✓
 
     d- Personalizar el estilo del sistema (tema claro y oscuro)
     e- Cambiar cosas del usuario como nombre, apellido, contraseña, etc
@@ -27,6 +27,22 @@
 8- Mejorar el apartado estético
 
 9- Agregar estados de carga y error
+
+TENGO QUE HACER ESTO MAÑANA ↘️ ✓
+
+10- Terminar el apartado de partidos con la creación de las instancias siguientes, semis, final y ganador del torneo ✓
+
+11- Cambiar comportamiento del sorteo de partidos, iniciarlo con un botón y sólo si están los inscriptos suficientes ✓
+
+12- Modificar que los inscriptos sólo se puedan eliminar si aún no se sortearon los partidos, y que los cupos NO se puedan cambiar si hay UN inscripto, para evitar errores futuros ✓
+
+13- Mejorar el formulario de alta de torneos a un wizard de pasos
+
+14- Optimizar todo el proyecto (llamadas a la api, frontend con lazyloading y transition optimizado, además de agregar subscriptions)
+
+15- Permitir que los jugadores y espectadores puedan ver el desarrollo del torneo PERO no modificar los resultados
+
+16- Agregar filtros por estado ("Inscripciones abiertas", "En curso" o "Finalizado")
 
 --- BUGS A CORREGIR ---
 

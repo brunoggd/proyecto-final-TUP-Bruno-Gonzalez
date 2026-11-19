@@ -140,7 +140,8 @@ export class TorneosPageComponent implements OnInit {
           fechaInicio: data.fechaInicio.split('T')[0],
           fechaFin: data.fechaFin.split('T')[0]
         };
-        // console.log(this.torneoSeleccionado);
+
+        this.torneos = this.torneos.map(t => t.id_torneo === data.id_torneo ? { ...t, estado: data.estado } : t );
         this.obtenerCategoriaTorneoSeleccionado(data.id_categoria);
       },
       error: (e) => {
@@ -162,7 +163,7 @@ export class TorneosPageComponent implements OnInit {
     this.torneosService.getPlayers(id).subscribe({
       next: (data) => {
         this.jugadoresInscriptos = data;
-        console.log(this.jugadoresInscriptos);
+        console.log('JUGADORES INSCRIPTOS:',this.jugadoresInscriptos);
       },
       error: (e) => {
         console.error(e);
@@ -269,6 +270,26 @@ export class TorneosPageComponent implements OnInit {
     });
   }
 
+  iniciarSorteo(idTorneo: number): void {
+    this.torneosService.iniciarSorteo(idTorneo).subscribe({
+      next: () => {
+        this.torneos = this.torneos.map(t => t.id_torneo === idTorneo ? { ...t, estado: 'en_curso' } : t );
+
+        if (this.torneoSeleccionado?.id_torneo === idTorneo) {
+          this.torneoSeleccionado = {
+            ...this.torneoSeleccionado,
+            estado: 'en_curso'
+          };
+        }
+
+        this.obtenerPartidosDelTorneo(idTorneo);
+      },
+      error: (e) => {
+        alert(e.error?.error ?? 'No se pudo generar el sorteo');
+      }
+    });
+  }
+
   obtenerCategoriaTorneoSeleccionado(id: number): void {
     this.categoriasService.getById(id).subscribe({
       next: (c) => {
@@ -279,6 +300,10 @@ export class TorneosPageComponent implements OnInit {
         console.error(e);
       }
     });
+  }
+
+  nombreCategoriaPorId(idCategoria: number): string {
+    return this.categorias.find(c => c.id_categoria === idCategoria)?.nombre ?? 'Categoría no disponible';
   }
 
   refrescarTorneoActual(): void {
@@ -322,6 +347,19 @@ export class TorneosPageComponent implements OnInit {
       this.cargarTorneosFiltrados(page);
     } else {
       this.cargarTorneos(page);
+    }
+  }
+
+  actualizarPartidos(partidos: PartidoDTO[]): void {
+    this.partidos = partidos;
+
+    if (!partidos.length) return;
+
+    const ultimaRonda = Math.max(...partidos.map(p => p.numero_ronda));
+    const final = partidos.filter(p => p.numero_ronda === ultimaRonda);
+
+    if (final.length === 1 && final[0].ganador !== null) {
+      this.obtenerTorneoPorId(this.torneoSeleccionado.id_torneo);
     }
   }
 }

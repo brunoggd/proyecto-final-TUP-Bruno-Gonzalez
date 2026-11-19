@@ -30,7 +30,7 @@
     height: 10px;
     background: white;
     border-radius: 50%;
-    animation: change-1 2s ease-in-out infinite;
+    animation: change-1 2.5s ease-in-out infinite;
 }
 
 .organizador {

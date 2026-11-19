@@ -1,12 +1,13 @@
 .torneo-card {
     display: flex;
     flex-direction: column;
-    width: 20vw;
+    width: 25vw;
     height: 50vh;
     border: 2px solid #1fae1d75;
     border-radius: 11px;
     backdrop-filter: blur(10px);
     transition: all 0.25s;
+    animation: fade-in 0.1s ease-in-out;
 }
 
 .torneo-card:hover {
@@ -15,7 +16,6 @@
 
     .tournament-icon {
         transform: rotate(5deg) scale(1.1);
-        filter: brightness(125%);
     }
 
     .bottom-title {
@@ -45,7 +45,7 @@
 .torneo-card__logo {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     gap: 15px;
     width: 100%;
@@ -63,7 +63,7 @@
     height: 40%;
     gap: 15px;
     padding: 10px;
-    background: linear-gradient(#22440d89, #1c571d91);
+    background: linear-gradient(#072e07, #113a13);
     border-radius: 0 0 10px 10px;
     border-top: 2px solid #1fae1d75;
     text-align: center;
@@ -125,8 +125,8 @@
     color: rgba(255, 255, 255, 0.813);
     padding: 5px;
     border-radius: 10px;
-    outline: 2px solid rgba(0, 128, 0, 0.32);
-    background-color: rgba(0, 128, 0, 0.126);
+    outline: 2px solid rgb(0, 82, 0);
+    background-color: rgba(0, 43, 0, 0.737);
     backdrop-filter: blur(10px);
     transition: all 0.25s;
 }
@@ -148,5 +148,99 @@
     .torneo-card__info {
         border-top: 2px solid #27F580;
         background: #0f331b;
+    }
+}
+
+.torneo-status {
+    border-radius: 10px 10px 0 0;
+    padding: 6px 10px;
+    color: white;
+    font-size: 1.1rem;
+    font-family: 'title-4';
+}
+
+.inscripcion_abierta {
+    border: 2px solid lightgreen;
+
+    .torneo-card__button-and-logo {
+        background: linear-gradient(#1c80495a,#33895f5e);
+    }
+
+    .torneo-card__info {
+        border-top: 2px solid lightgreen;
+        background: #0a2717;
+    }
+
+    .torneo-status {
+        border-top: 2px solid lightgreen;
+        border-right: 2px solid lightgreen;
+        border-left: 2px solid lightgreen;
+        box-shadow: 0 0 3px 0 lightgreen;
+        background: rgba(144, 238, 144, 0.131);
+    }
+
+    .bottom-title{
+        background-color: rgba(144, 238, 144, 0.09);
+        outline: 2px solid rgba(144, 238, 144, 0.562);
+    }
+}
+
+.en_curso {
+    border: 2px solid lightsalmon;
+
+    .torneo-card__button-and-logo {
+        background: linear-gradient(#805d1c5a,#897f335e);
+    }
+
+    .torneo-card__info {
+        border-top: 2px solid lightsalmon;
+        background: #271c0a;
+    }
+
+    .torneo-status {
+        border-top: 2px solid lightsalmon;
+        border-right: 2px solid lightsalmon;
+        border-left: 2px solid lightsalmon;
+        box-shadow: 0 0 3px 0 lightsalmon;
+        background: rgba(238, 211, 144, 0.131);
+    }
+
+    .bottom-title{
+        background-color: rgba(255, 160, 122, 0.088);
+        outline: 2px solid rgba(255, 160, 122, 0.532);
+    }
+
+    .tournament-icon, .delete-button-icon, .button-icon, .small-icon {
+        filter: hue-rotate(-25deg);
+    }
+}
+
+.finalizado {
+    border: 2px solid lightgray;
+
+    .torneo-card__button-and-logo {
+        background: linear-gradient(#6b6b6b5a,#d6d6d65e);
+    }
+
+    .torneo-card__info {
+        border-top: 2px solid lightgray;
+        background: #2c2c2c;
+    }
+
+    .torneo-status {
+        border-top: 2px solid lightgray;
+        border-right: 2px solid lightgray;
+        border-left: 2px solid lightgray;
+        box-shadow: 0 0 3px 0 lightgray;
+        background: rgba(39, 39, 39, 0.131);
+    }
+
+    .bottom-title{
+        background-color: rgba(211, 211, 211, 0.107);
+        outline: 2px solid rgba(211, 211, 211, 0.505);
+    }
+
+    .tournament-icon, .delete-button-icon, .button-icon, .small-icon {
+        filter: saturate(0);
     }
 }

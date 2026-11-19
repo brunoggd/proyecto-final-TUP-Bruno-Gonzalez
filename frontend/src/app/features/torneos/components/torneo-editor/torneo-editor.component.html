@@ -8,34 +8,58 @@
             <div class="torneo-editor__actions">
                 <button class="action-button" (click)="volverAlMostradorDePartidos()">Volver al mostrador de torneos</button>
                 <button class="action-button" (click)="toggleMenuPartidos()">Ver partidos</button>
+                <button class="action-button" *ngIf="torneo.estado === 'inscripcion_abierta' && jugadoresInscriptos.length === torneo.jugadores" (click)="emitirSolicitudSorteo()">Iniciar sorteo</button>
             </div>
             <div class="torneo-editor__torneo-datos">
-                <app-torneo-editor-campo [label]="'Nombre:'" [value]="torneoEditado.nombre" [nombreCampo]="'nombre'"
-                    (confirmar)="modificarTorneo($event)">
+                <app-torneo-editor-campo
+                [label]="'Nombre:'" 
+                [value]="torneoEditado.nombre"
+                [nombreCampo]="'nombre'"
+                (confirmar)="modificarTorneo($event)">
                 </app-torneo-editor-campo>
             
-                <app-torneo-editor-campo [label]="'Fecha de inicio:'" [value]="torneoEditado.fechaInicio"
-                    [nombreCampo]="'fechaInicio'" (confirmar)="modificarTorneo($event)">
+                <app-torneo-editor-campo
+                [label]="'Fecha de inicio:'" 
+                [value]="torneoEditado.fechaInicio"
+                [nombreCampo]="'fechaInicio'" 
+                (confirmar)="modificarTorneo($event)">
                 </app-torneo-editor-campo>
             
-                <app-torneo-editor-campo [label]="'Fecha de fin:'" [value]="torneoEditado.fechaFin" [nombreCampo]="'fechaFin'"
-                    (confirmar)="modificarTorneo($event)">
+                <app-torneo-editor-campo
+                [label]="'Fecha de fin:'" 
+                [value]="torneoEditado.fechaFin"
+                [nombreCampo]="'fechaFin'"
+                (confirmar)="modificarTorneo($event)">
                 </app-torneo-editor-campo>
             
-                <app-torneo-editor-campo [label]="'Jugadores:'" [value]="torneoEditado.jugadores" [nombreCampo]="'jugadores'"
-                    (confirmar)="modificarTorneo($event)">
+                <app-torneo-editor-campo
+                [label]="'Jugadores:'" 
+                [value]="torneoEditado.jugadores" 
+                [nombreCampo]="'jugadores'"
+                [editable]="jugadoresInscriptos.length === 0"
+                (confirmar)="modificarTorneo($event)">
                 </app-torneo-editor-campo>
             
-                <app-torneo-editor-campo [label]="'Premio:'" [value]="torneoEditado.montoPremio" [nombreCampo]="'montoPremio'"
-                    (confirmar)="modificarTorneo($event)">
+                <app-torneo-editor-campo
+                [label]="'Premio:'" 
+                [value]="torneoEditado.montoPremio"
+                [nombreCampo]="'montoPremio'"
+                (confirmar)="modificarTorneo($event)">
                 </app-torneo-editor-campo>
             
-                <app-torneo-editor-campo [label]="'Sede:'" [value]="torneoEditado.ubicacion" [nombreCampo]="'ubicacion'"
-                    (confirmar)="modificarTorneo($event)">
+                <app-torneo-editor-campo
+                [label]="'Sede:'" 
+                [value]="torneoEditado.ubicacion"
+                [nombreCampo]="'ubicacion'"
+                (confirmar)="modificarTorneo($event)">
                 </app-torneo-editor-campo>
             
-                <app-torneo-editor-campo [label]="'Categoría:'" [value]="torneoEditado.id_categoria" [nombreCampo]="'id_categoria'"
-                    [categorias]="categorias" (confirmar)="modificarTorneo($event)">
+                <app-torneo-editor-campo
+                [label]="'Categoría:'" 
+                [value]="torneoEditado.id_categoria"
+                [nombreCampo]="'id_categoria'"
+                [categorias]="categorias"
+                (confirmar)="modificarTorneo($event)">
                 </app-torneo-editor-campo>
             </div>
         </div>
@@ -47,6 +71,7 @@
                 <app-torneo-jugador-inscripto-card
                 *ngFor="let i of jugadoresInscriptos"
                 [jugador]="i"
+                [sePuedeBorrar]="torneo.estado === 'inscripcion_abierta'"
                 (eliminarJugador)="eliminarInscripcion($event)"
                 ></app-torneo-jugador-inscripto-card>
             </div>
@@ -54,6 +79,10 @@
     </div>
     <app-partidos-page
     [partidos]="partidos"
+    [idTorneo]="torneo.id_torneo"
+    [fechaInicioTorneo]="torneo.fechaInicio"
+    [fechaFinTorneo]="torneo.fechaFin"
+    (partidosActualizados)="actualizarPartidos($event)"
     *ngIf="menu === 1"
     ></app-partidos-page>
 </div>

@@ -1,7 +1,10 @@
 export interface PartidoDTO {
     id_partido: number;
+    numero_ronda: number;
+    numero_partido: number;
     fecha: string;
     hora: string;
+    ganador: number | null;
     id_jugador1: number;
     nombre_jugador1: string;
     apellido_jugador1: string;

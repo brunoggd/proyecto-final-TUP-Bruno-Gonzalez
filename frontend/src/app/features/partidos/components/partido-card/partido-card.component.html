@@ -1,22 +1,24 @@
-<div class="partido">
+<div class="partido" [ngClass]="{'seleccionado': seleccionado}">
     <div class="partido__top">
-        <p class="partido__title"> RONDA {{ partido.id_partido }} - {{ partido.fecha | date: 'shortDate' }} - {{ partido.hora }} </p>
+        <p class="partido__title">Ronda {{ partido.numero_ronda }} - Partido {{ partido.numero_partido }} - {{ partido.fecha | date: 'dd/MM/yyyy' }} - {{ partido.hora }}</p>
         <button class="partido__edit-button" (click)="seleccionarPartido(partido.id_partido)"><img src="editar.png" alt="edit" class="partido__img"></button>
     </div>
     <div class="partido__player-1">
         <div class="partido__player-1-name">
-            <p class="partido__title"> {{ partido.id_jugador1 }}) {{ partido.nombre_jugador1 }} {{ partido.apellido_jugador1 }} </p>
+            <p class="partido__title" [ngClass]="{'ganador' : partido.ganador === partido.id_jugador1}"> {{ partido.nombre_jugador1 }} {{ partido.apellido_jugador1 }} </p>
+            <p class="winner-identifier" *ngIf="partido.ganador === partido.id_jugador1">★</p>
         </div>
         <div class="partido__player-1-results">
-            <p class="partido__title" *ngFor="let s of sets"> {{ s.games_jugador1 }} </p>
+            <p class="partido__title" [ngClass]="{'ganador' : partido.ganador === partido.id_jugador1}" *ngFor="let s of sets"> {{ s.games_jugador1 }} </p>
         </div>
     </div>
     <div class="partido__player-2">
         <div class="partido__player-2-name">
-            <p class="partido__title"> {{ partido.id_jugador2 }}) {{ partido.nombre_jugador2 }} {{ partido.apellido_jugador2 }} </p>
+            <p class="partido__title" [ngClass]="{'ganador' : partido.ganador === partido.id_jugador2}"> {{ partido.nombre_jugador2 }} {{ partido.apellido_jugador2 }} </p>
+            <p class="winner-identifier" *ngIf="partido.ganador === partido.id_jugador2">★</p>
         </div>
         <div class="partido__player-2-results">
-            <p class="partido__title" *ngFor="let s of sets"> {{ s.games_jugador2 }} </p>
+            <p class="partido__title" [ngClass]="{'ganador' : partido.ganador === partido.id_jugador2}" *ngFor="let s of sets"> {{ s.games_jugador2 }} </p>
         </div>
     </div>
 </div>

@@ -12,8 +12,8 @@ export class TorneoEditorCampoComponent {
   @Input() label!: string;
   @Input() value!: string | number;
   @Input() nombreCampo!: CampoTorneoEditable;
-
   @Input() categorias!: Categoria[];
+  @Input() editable = true;
 
   @Output() confirmar = new EventEmitter<CampoEditado>();
 

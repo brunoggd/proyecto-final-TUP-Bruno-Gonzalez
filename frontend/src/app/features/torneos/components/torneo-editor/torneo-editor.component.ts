@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Torneo } from '../../../../core/interfaces/torneo.interface';
 import { CampoEditado } from '../../../../core/interfaces/campo-editado.interface';
 import { JugadorInscripto } from '../../../../core/interfaces/jugador-inscripto';
@@ -22,6 +22,9 @@ export class TorneoEditorComponent implements OnInit, OnChanges {
 
   @Output() torneoModificado = new EventEmitter<Torneo>();
   @Output() inscripcionEliminada = new EventEmitter<number>();
+  @Output() iniciarSorteo = new EventEmitter<number>();
+
+  @Output() partidosActualizados = new EventEmitter<PartidoDTO[]>();
 
   @Output() volver = new EventEmitter<boolean>();
 
@@ -31,14 +34,10 @@ export class TorneoEditorComponent implements OnInit, OnChanges {
     this.torneoEditado = { ...this.torneo };
   }
 
-  ngOnChanges(): void {
-    // console.log('TORNEO NUEVO', this.torneo);
-
-    this.torneoEditado = {
-      ...this.torneo
-    };
-
-    // console.log('Categoría actual:', this.categoriaActual);
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['torneo'] && this.torneo) {
+      this.torneoEditado = { ...this.torneo };
+    }
   }
 
   modificarTorneo(e: CampoEditado): void {
@@ -66,5 +65,13 @@ export class TorneoEditorComponent implements OnInit, OnChanges {
 
   volverAlMostradorDePartidos(): void {
     this.volver.emit(false);
+  }
+
+  emitirSolicitudSorteo(): void {
+    this.iniciarSorteo.emit(this.torneo.id_torneo);
+  }
+
+  actualizarPartidos(partidos: PartidoDTO[]): void {
+    this.partidosActualizados.emit(partidos);
   }
 }

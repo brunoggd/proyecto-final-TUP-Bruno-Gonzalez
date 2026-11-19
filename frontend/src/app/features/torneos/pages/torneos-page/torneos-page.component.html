@@ -33,6 +33,7 @@
                 *ngIf="!torneoSeleccionado || !torneoEditorHabilitado"
                 [esMiTorneo]="esMiTorneo(t)"
                 [torneo]="t"
+                [nombreCategoria]="nombreCategoriaPorId(t.id_categoria)"
                 (torneoSeleccionado)="seleccionarTorneo($event)"
                 (eliminar)="eliminarTorneo($event)"
                 (anotarse)="agregarInscripcion($event)"
@@ -69,6 +70,8 @@
 
             (torneoModificado)="guardarCambios($event)"
             (inscripcionEliminada)="eliminarInscripcion($event)"
+            (iniciarSorteo)="iniciarSorteo($event)"
+            (partidosActualizados)="actualizarPartidos($event)"
             (volver)="toggleEditorTorneo($event)"
             ></app-torneo-editor>
         </div>

@@ -10,6 +10,7 @@ import { AuthService } from '../../../../core/services/auth.service';
 export class TorneoCardComponent {
   @Input() torneo!: Torneo;
   @Input() esMiTorneo!: boolean;
+  @Input() nombreCategoria = '';
 
   @Output() torneoSeleccionado = new EventEmitter<Torneo>();
   @Output() eliminar = new EventEmitter<number>();

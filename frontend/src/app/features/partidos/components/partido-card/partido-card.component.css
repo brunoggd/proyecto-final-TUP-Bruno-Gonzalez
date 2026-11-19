@@ -1,17 +1,17 @@
 .partido {
     display: flex;
     flex-direction: column;
-    width: 35vw;
+    width: 100%;
     height: 25vh;
     background: rgba(0, 128, 0, 0.378);
     border-radius: 20px;
     border: 2px solid darkgreen;
     color: white;
-    box-shadow: 0 0 15 px 0 rgba(0, 56, 0, 0.378);
+    box-shadow: 0 0 15px 0 rgba(0, 56, 0, 0.378);
+    transition: all 0.25s;
 }
 
 .partido__top {
-    /* outline: 2px solid yellow; */
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -38,6 +38,8 @@
 .partido__player-1-name, .partido__player-2-name {
     display: flex;
     flex-direction: row;
+    align-items: center;
+    gap: 10px;
     width: 50%;
     flex-grow: 1;
 }
@@ -55,6 +57,7 @@
     border-radius: 10px;
     border: 2px solid rgb(0, 162, 0);
     background: rgb(0, 138, 0);
+    font-family: 'title-3';
     font-size: 0.9rem;
 }
 
@@ -76,4 +79,18 @@
     object-fit: contain;
     width: 100%;
     height: 100%;
+}
+
+.ganador {
+    border: 2px solid rgb(255, 255, 108);
+}
+
+.winner-identifier {
+    color: rgb(255, 255, 108);
+    text-shadow: 0 0 2px yellow;
+}
+
+.seleccionado {
+    background: rgba(0, 59, 0, 0.378);
+    box-shadow: 0 0 10px 0 green;
 }

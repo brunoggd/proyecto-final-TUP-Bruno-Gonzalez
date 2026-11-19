@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import { inscripcionModel, type InscripcionInput } from "../models/inscripcion.model";
+import { inscripcionModel } from "../models/inscripcion.model";
 
 type IdParams = { id: string };
 type RequestConPersona = Request & {
@@ -12,13 +12,6 @@ type RequestConPersona = Request & {
 function parseId(value: string): number | null {
     const id = Number(value);
     return Number.isInteger(id) && id > 0 ? id : null;
-}
-
-function isInscripcionInput(body: any): body is InscripcionInput {
-    return (
-        Number.isInteger(body?.id_persona) && Number(body.id_persona) > 0 &&
-        Number.isInteger(body?.id_torneo) && Number(body.id_torneo) > 0
-    );
 }
 
 export const getAll = async (_req: Request, res: Response) => {
@@ -55,12 +48,9 @@ export const create = async (req: RequestConPersona, res: Response) => {
     }
 
     try {
-        const nueva = await inscripcionModel.createIfAvailable(
-            req.persona.id,
-            idTorneo
-        );
-
+        const nueva = await inscripcionModel.createIfAvailable(req.persona.id, idTorneo);
         res.status(201).json(nueva);
+
     } catch (error) {
         const code = error instanceof Error ? error.message : '';
 
@@ -70,7 +60,7 @@ export const create = async (req: RequestConPersona, res: Response) => {
         }
 
         if (code === 'TORNEO_COMPLETO') {
-            res.status(409).json({ error: 'El torneo ya está completo' });
+            res.status(409).json({ error: 'El torneo ya alcanzó el cupo de inscriptos' });
             return;
         }
 
@@ -79,31 +69,13 @@ export const create = async (req: RequestConPersona, res: Response) => {
             return;
         }
 
+        if (code === 'INSCRIPCION_CERRADA') {
+            res.status(409).json({ error: 'Las inscripciones de este torneo están cerradas' });
+            return;
+        }
+
         throw error;
     }
-};
-
-export const update = async (req: Request<IdParams>, res: Response) => {
-    const id = parseId(req.params.id);
-    if (!id) {
-        res.status(400).json({error: 'ID inválido'});
-        return;
-    }
-
-    if (!isInscripcionInput(req.body)) {
-        res.status(400).json({error: 'Datos inválidos'});
-        return;
-    }
-
-    const ok = await inscripcionModel.update(id, req.body);
-    if (!ok) {
-        res.status(404).json({error: 'Inscripción no encontrada'});
-        return;
-    }
-
-    res.json({
-        id, ...req.body
-    });
 };
 
 export const remove = async (req: Request<IdParams>, res: Response) => {
@@ -113,9 +85,15 @@ export const remove = async (req: Request<IdParams>, res: Response) => {
         return;
     }
 
-    const ok = await inscripcionModel.remove(id);
-    if (!ok) {
-        res.status(404).json({error: 'Inscripción no encontrada'});
+    const resultado = await inscripcionModel.removeIfRegistrationOpen(id);
+
+    if (resultado === 'NO_ENCONTRADO') {
+        res.status(404).json({ error: 'Inscripción no encontrada' });
+        return;
+    }
+
+    if (resultado === 'INSCRIPCION_CERRADA') {
+        res.status(409).json({ error: 'No se puede eliminar la inscripción porque las inscripciones están cerradas' });
         return;
     }
 

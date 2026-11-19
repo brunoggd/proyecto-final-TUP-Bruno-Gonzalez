@@ -79,6 +79,10 @@ export class TorneoService {
     return this.http.post<Torneo>(this.apiUrl, torneo, { headers: this.getHeaders() });
   }
 
+  iniciarSorteo(idTorneo: number): Observable<{ mensaje: string; partidos: number }> {
+    return this.http.post<{ mensaje: string; partidos: number }>(`${this.apiUrl}/sorteo/${idTorneo}`, {}, { headers: this.getHeaders() });
+  }
+
   update(id: number, torneo: TorneoAlta): Observable<Torneo> {
     return this.http.put<Torneo>(`${this.apiUrl}/${id}`, torneo, { headers: this.getHeaders() });
   }

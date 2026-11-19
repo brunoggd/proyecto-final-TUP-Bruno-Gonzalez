@@ -8,11 +8,12 @@ import { JugadorInscripto } from '../../../../core/interfaces/jugador-inscripto'
 })
 export class TorneoJugadorInscriptoCardComponent {
   @Input() jugador!: JugadorInscripto;
+  @Input() sePuedeBorrar: boolean = true;
 
   @Output() eliminarJugador = new EventEmitter<number>();
 
   eliminar(): void {
-    console.log(`ID INSCRIPCION DEL JUGADOR ${this.jugador.nombre} ${this.jugador.apellido}: ${this.jugador.id_inscripcion}`);
+    // console.log(`ID INSCRIPCION DEL JUGADOR ${this.jugador.nombre} ${this.jugador.apellido}: ${this.jugador.id_inscripcion}`);
     
     this.eliminarJugador.emit(this.jugador.id_inscripcion);
   }

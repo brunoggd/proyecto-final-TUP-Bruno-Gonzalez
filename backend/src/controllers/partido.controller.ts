@@ -1,5 +1,7 @@
 import type { Request, Response } from "express";
-import { partidoModel, type PartidoInput } from "../models/partido.model";
+import { partidoModel, type SetPartido, type PartidoInput } from "../models/partido.model";
+import { isValidDateOnly } from "../helpers/isValidDateOnly";
+import { isValidTime } from "../helpers/isValidTime";
 
 type IdParams = { id: string };
 
@@ -14,6 +16,17 @@ function isPartidoInput(body: any): body is PartidoInput {
         Number.isInteger(body?.ganador) && Number(body.ganador) > 0 &&
         typeof body?.fecha === 'string' && body.fecha.trim() !== '' &&
         typeof body?.hora === 'string' && body.hora.trim() !== ''
+    );
+}
+
+function isSetPartidoArray(body: any): body is SetPartido[] {
+    return (
+        Array.isArray(body) &&
+        body.every(set =>
+            Number.isInteger(set?.id_set) && set.id_set > 0 &&
+            Number.isInteger(set?.games_jugador1) && set.games_jugador1 >= 0 &&
+            Number.isInteger(set?.games_jugador2) && set.games_jugador2 >= 0
+        )
     );
 }
 
@@ -53,48 +66,43 @@ export const create = async (req: Request, res: Response) => {
     res.status(201).json(nuevo);
 };
 
-export const update = async (req: Request<IdParams>, res: Response) => {
+export const updateSchedule = async (req: Request<IdParams>, res: Response) => {
     const id = parseId(req.params.id);
 
     if (!id) {
-        res.status(400).json({error: 'ID inválido'});
+        res.status(400).json({ error: 'ID inválido' });
         return;
     }
 
-    if (!isPartidoInput(req.body)) {
-        res.status(400).json({error: 'Datos inválidos'});
+    const { fecha, hora } = req.body;
+
+    if (!isValidDateOnly(fecha)) {
+        res.status(400).json({ error: 'La fecha debe ser válida y tener formato YYYY-MM-DD' });
         return;
     }
 
-    const ok = await partidoModel.update(id, req.body);
-
-    if (!ok) {
-        res.status(404).json({error: 'Partido no encontrado'});
+    if (!isValidTime(hora)) {
+        res.status(400).json({ error: 'La hora debe ser válida y tener formato HH:mm' });
         return;
     }
 
-    res.json({
-        id,
-        ...req.body
-    });
-};
+    const rango = await partidoModel.findTournamentDateRangeByMatch(id);
 
-export const remove = async (req: Request<IdParams>, res: Response) => {
-    const id = parseId(req.params.id);
-
-    if (!id) {
-        res.status(400).json({error: 'ID inválido'});
+    if (!rango) {
+        res.status(404).json({ error: 'Partido no encontrado' });
         return;
     }
 
-    const ok = await partidoModel.remove(id);
-
-    if (!ok) {
-        res.status(404).json({error: 'Partido no encontrado'});
+    if (fecha < rango.fechaInicio || fecha > rango.fechaFin) {
+        res.status(400).json({
+            error: 'La fecha debe estar entre el inicio y el fin del torneo'
+        });
         return;
     }
 
-    res.status(204).send();
+    await partidoModel.updateSchedule(id, fecha, hora);
+
+    res.json({ id_partido: id, fecha, hora });
 };
 
 export const getSetsByMatch = async (req: Request<IdParams>,res: Response) => {
@@ -112,34 +120,78 @@ export const getSetsByMatch = async (req: Request<IdParams>,res: Response) => {
 
 export const updateSets = async (req: Request<IdParams>, res: Response) => {
     const id = parseId(req.params.id);
+
     if (!id) {
-        res.status(400).json({
-            error: 'ID inválido'
-        });
+        res.status(400).json({ error: 'ID inválido' });
         return;
     }
-    const ok = await partidoModel.updateSets(id, req.body);
-    if (!ok) {
-        res.status(404).json({
-            error: 'Partido no encontrado'
+
+    if (!isSetPartidoArray(req.body)) {
+        res.status(400).json({ error: 'Se esperaba un array de sets válido' });
+        return;
+    }
+
+    const resultado = await partidoModel.updateSets(id, req.body);
+
+    if (resultado.estado === 'PARTIDO_NO_ENCONTRADO') {
+        res.status(404).json({ error: 'Partido no encontrado' });
+        return;
+    }
+
+    if (resultado.estado === 'RONDA_CERRADA') {
+        res.status(409).json({
+            error: 'No se puede modificar el resultado: ya se creó una ronda posterior'
         });
         return;
     }
 
-    res.status(200).json({mensaje: 'Resultado actualizado'});
+    if (resultado.estado === 'CAMPEON_DETERMINADO') {
+        res.json({
+            mensaje: 'Resultado actualizado; se determinó el campeón',
+            ganador: resultado.ganador,
+            campeon: resultado.ganador
+        });
+        return;
+    }
+
+    if (resultado.estado === 'RONDA_CREADA') {
+        res.json({
+            mensaje: 'Resultado actualizado y siguiente ronda creada',
+            ganador: resultado.ganador,
+            numero_ronda: resultado.numero_ronda,
+            partidos_creados: resultado.partidos_creados
+        });
+        return;
+    }
+
+    res.json({
+        mensaje: 'Resultado actualizado',
+        ganador: resultado.ganador
+    });
 };
 
 export const createSet = async (req: Request<IdParams>, res: Response) => {
     const id = parseId(req.params.id);
     if (!id) {
-        res.status(400).json({
-            error: 'ID inválido'
+        res.status(400).json({ error: 'ID inválido' });
+        return;
+    }
+
+    const resultado = await partidoModel.createSet(id);
+
+    if (resultado === 'PARTIDO_NO_ENCONTRADO') {
+        res.status(404).json({ error: 'Partido no encontrado' });
+        return;
+    }
+
+    if (resultado === 'RONDA_CERRADA') {
+        res.status(409).json({
+            error: 'No se pueden modificar los sets: ya se avanzó a una ronda posterior'
         });
         return;
     }
 
-    const ok = await partidoModel.createSet(id);
-    res.status(ok ? 201 : 400).json({ok});
+    res.status(201).json({ ok: true });
 };
 
 export const removeSet = async (req: Request<IdParams>, res: Response) => {
@@ -151,11 +203,15 @@ export const removeSet = async (req: Request<IdParams>, res: Response) => {
         return;
     }
 
-    const ok = await partidoModel.removeSet(id);
-    if (!ok) {
-        res.status(404).json({
-            error: 'Set no encontrado'
-        });
+    const resultado = await partidoModel.removeSet(id);
+
+    if (resultado === 'SET_NO_ENCONTRADO') {
+        res.status(404).json({ error: 'Set no encontrado' });
+        return;
+    }
+
+    if (resultado === 'RONDA_CERRADA') {
+        res.status(409).json({ error: 'No se pueden modificar los sets: ya se avanzó a una ronda posterior' });
         return;
     }
 

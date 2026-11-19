@@ -1,12 +1,23 @@
 <div class="partido-editor">
     <div class="partido-editor__header">
-        <p class="partido-editor__title">Resultados del partido</p>
+        <p class="partido-editor__title">Ronda {{ partido.numero_ronda }} - Partido {{ partido.numero_partido }}</p>
     </div>
     <div class="partido-editor__body">
+        <div class="partido-editor__date-section">
+            <div class="partido-editor__date-section-field">
+                <label class="label" for="date">Fecha:</label>
+                <input class="input" id="date" type="date" [min]="fechaMinima" [max]="fechaMaxima" [(ngModel)]="fecha">
+            </div>
+            <div class="partido-editor__date-section-field">
+                <label class="label" for="time">Hora:</label>
+                <input class="input" id="time" type="time" [(ngModel)]="hora">
+            </div>
+            <button class="confirm-button" (click)="guardarHorarioPartido()">Guardar horario</button>
+        </div>
         <div class="partido-editor__sets-displayer">
-            <div class="partido-editor__set" *ngFor="let s of partidoSeleccionado">
+            <div class="partido-editor__set" *ngFor="let s of sets; let i = index">
                 <div class="partido-editor__set-header">
-                    <p class="partido-editor__title"> Set {{ partidoSeleccionado.indexOf(s) + 1 }} </p>
+                    <p class="partido-editor__title">Set {{ i + 1 }}</p>
                     <button class="delete-button" (click)="eliminarSet(s.id_set)">X</button>
                 </div>
                 <div class="partido-editor__games">

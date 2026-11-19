@@ -15,6 +15,13 @@ function parseId(value: string): number | null {
     return Number.isInteger(id) && id > 0 ? id : null;
 }
 
+const CUPOS_PERMITIDOS = [16, 32, 64];
+
+function isCupoValido(value: unknown): boolean {
+    const cupo = Number(value);
+    return Number.isInteger(cupo) && CUPOS_PERMITIDOS.includes(cupo);
+}
+
 function isTorneoInput(body: any): body is TorneoInput {
     return (
         Number.isInteger(Number(body?.id_categoria)) &&
@@ -26,8 +33,7 @@ function isTorneoInput(body: any): body is TorneoInput {
         typeof body?.ubicacion === 'string' &&
         body.ubicacion.trim() !== '' &&
 
-        Number.isInteger(Number(body?.jugadores)) &&
-        Number(body.jugadores) > 0 &&
+        isCupoValido(body?.jugadores) &&
 
         Number.isInteger(Number(body?.montoPremio)) &&
         Number(body.montoPremio) >= 0 &&
@@ -163,47 +169,87 @@ export const create = async (req: RequestConPersona, res: Response) => {
         return;
     }
 
-    const nuevo = await torneoModel.create({
+    const datos = {
         ...req.body,
+        jugadores: Number(req.body.jugadores),
         id_creador: req.persona.id
-    });
+    };
+
+    const nuevo = await torneoModel.create(datos);
 
     res.status(201).json(nuevo);
+};
+
+export const generarSorteo = async (req: Request<IdParams>, res: Response) => {
+    const id = parseId(req.params.id);
+
+    if (!id) {
+        res.status(400).json({ error: 'ID inválido' });
+        return;
+    }
+
+    const resultado = await torneoModel.generarSorteo(id);
+
+    if (resultado.estado === 'TORNEO_NO_ENCONTRADO') {
+        res.status(404).json({ error: 'Torneo no encontrado' });
+        return;
+    }
+
+    if (resultado.estado === 'SORTEO_YA_GENERADO') {
+        res.status(409).json({ error: 'El sorteo de este torneo ya fue generado' });
+        return;
+    }
+
+    if (resultado.estado === 'INSCRIPTOS_INSUFICIENTES') {
+        res.status(409).json({
+            error: 'Todavía faltan inscriptos para completar el torneo',
+            inscriptos: resultado.inscriptos,
+            capacidad: resultado.capacidad
+        });
+        return;
+    }
+
+    res.status(201).json({
+        mensaje: 'Sorteo generado',
+        partidos: resultado.partidos
+    });
 };
 
 export const update = async (req: Request<IdParams>, res: Response) => {
     const id = parseId(req.params.id);
 
     if (!id) {
-        res.status(400).json({
-            error: 'ID inválido'
-        });
+        res.status(400).json({error: 'ID inválido'});
         return;
     }
 
     if (!isTorneoInput(req.body)) {
-        res.status(400).json({
-            error: 'Datos inválidos',
-            body: req.body
-        });
+        res.status(400).json({error: 'Datos inválidos',body: req.body});
         return;
     }
 
-    const ok = await torneoModel.update(
-        id,
-        req.body
-    );
+    const datos = {
+        ...req.body,
+        jugadores: Number(req.body.jugadores)
+    };
 
-    if (!ok) {
-        res.status(404).json({
-            error: 'Torneo no encontrado'
+    const resultado = await torneoModel.update(id, datos);
+
+    if (resultado === 'TORNEO_NO_ENCONTRADO') {
+        res.status(404).json({ error: 'Torneo no encontrado' });
+        return;
+    }
+
+    if (resultado === 'CAPACIDAD_BLOQUEADA') {
+        res.status(409).json({
+            error: 'No se puede cambiar el cupo porque el torneo ya tiene inscriptos'
         });
         return;
     }
 
     res.json({
         id_torneo: id,
-        ...req.body
+        ...datos
     });
 };
 

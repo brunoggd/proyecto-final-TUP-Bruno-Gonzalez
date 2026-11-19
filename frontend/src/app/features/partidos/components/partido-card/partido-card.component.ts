@@ -11,6 +11,8 @@ import { Subscription } from 'rxjs';
 })
 export class PartidoCardComponent implements OnInit {
   @Input() partido!: PartidoDTO;
+  @Input() idPartido!: number;
+  @Input() seleccionado = false;
 
   @Output() seleccionar = new EventEmitter<number>();
 
@@ -23,7 +25,6 @@ export class PartidoCardComponent implements OnInit {
     this.partidosService.getSetsByMatch(this.partido.id_partido).subscribe({
       next: (d) => {
         this.sets = d;
-        console.log(this.sets);
       },
       error: (e) => {
         console.error(e);

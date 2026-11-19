@@ -42,3 +42,17 @@ Comprobaciones
     12. Probá la primera página, una página intermedia, la última página parcial, los filtros y el caso sin resultados.
 
     14. Recordá que los controles de autorización son independientes de la paginación: un 403 indica un problema de permisos, no de limit u offset.
+
+
+--- Reglas de negocio ---
+
+- Los torneos admiten 16, 32 o 64 jugadores.
+- El cupo no se puede cambiar cuando el torneo ya tiene inscriptos.
+- Un jugador puede inscribirse una sola vez por torneo, si todavía hay cupo y las inscripciones siguen abiertas.
+- Los inscriptos pueden darse de baja mientras el torneo esté en estado inscripcion_abierta.
+- El sorteo lo inicia el organizador manualmente y solo puede hacerlo cuando se completó el cupo.
+- El sorteo mezcla a los inscriptos y crea los partidos de la primera ronda. Al hacerlo, el torneo pasa a en_curso y ya no permite nuevas inscripciones ni bajas.
+- Los partidos comienzan con la fecha de inicio del torneo y a las 12:00; el organizador puede ajustar sus horarios dentro del rango de fechas del torneo.
+- Cuando todos los partidos de una ronda tienen ganador, se crea automáticamente la ronda siguiente, emparejando consecutivamente a los ganadores según el número de partido.
+- Al guardar el resultado de la final, se determina el campeón y el torneo pasa a finalizado.
+- Cuando ya existe una ronda posterior, no se pueden cambiar los resultados ni agregar o borrar sets de las rondas anteriores.

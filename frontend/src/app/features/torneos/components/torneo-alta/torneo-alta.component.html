@@ -19,12 +19,16 @@
                     obligatoria</span>
             </div>
             <div class="torneo-alta__field">
-                <label class="label">Jugadores</label>
-                <input class="input-number" type="number" min="2" formControlName="jugadores">
+                <label class="label">Cantidad de jugadores</label>
+                <select class="select" formControlName="jugadores">
+                    <option [ngValue]="16">16</option>
+                    <option [ngValue]="32">32</option>
+                    <option [ngValue]="64">64</option>
+                </select>
                 <span class="error" *ngIf="f.jugadores.touched && f.jugadores.errors?.['required']">Debe indicar la
                     cantidad
                     de jugadores</span>
-                <span class="error" *ngIf="f.jugadores.touched && f.jugadores.errors?.['min']">Debe haber al menos 2
+                <span class="error" *ngIf="f.jugadores.touched && f.jugadores.errors?.['min']">Debe haber al menos 16
                     jugadores</span>
             </div>
             <div class="torneo-alta__field">

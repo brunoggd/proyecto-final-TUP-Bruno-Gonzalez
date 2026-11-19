@@ -1,22 +1,24 @@
-<div class="torneo-card" [ngClass]="{'mi-torneo' : esMiTorneo}">
+<div class="torneo-card" [ngClass]="{'mi-torneo' : esMiTorneo}" [ngClass]="torneo.estado">
     <div class="torneo-card__button-and-logo">
         <div class="torneo-card__button">
             <button class="button" (click)="eliminarTorneo()" *ngIf="soyOrganizador() && esMiTorneo">
                 <img src="eliminar-2.png" alt="delete-tournament" class="delete-button-icon">
             </button>
-            <button class="button" (click)="anotarseAlTorneo()" *ngIf="soyJugador()">
+            <button class="button" (click)="anotarseAlTorneo()" *ngIf="soyJugador() && torneo.estado === 'inscripcion_abierta'">
                 <img src="flecha-derecha.png" alt="right-arrow" class="button-icon">
             </button>
         </div>
         <div class="torneo-card__logo" (click)="seleccionar()">
             <img src="tournamentLogo.png" alt="logo" class="tournament-icon">
             <p class="advice" *ngIf="esMiTorneo">¡Este torneo es tuyo!</p>
+            <p class="torneo-status"> {{ torneo.estado === 'inscripcion_abierta' ? 'Inscripción abierta' : torneo.estado === 'en_curso' ? 'En curso' : torneo.estado === 'finalizado' ? 'Finalizado' : '' }} </p>
         </div>
     </div>
     <div class="torneo-card__info">
         <p class="bottom-title"><img src="trofeo.png" alt="trophy" class="small-icon"> {{ torneo.nombre }} </p>
         <p class="bottom-title"><img src="calendario.png" alt="calendar" class="small-icon"> {{ torneo.fechaInicio | date: 'dd/MM/yyyy'}} </p>
         <p class="bottom-title"><img src="ubicacion.png" alt="location" class="small-icon"> {{ torneo.ubicacion }} </p>
-        <p class="bottom-title" *ngIf="torneo.montoPremio > 0"><img src="dinero.png" alt="prize" class="small-icon"> ${{ torneo.montoPremio }} </p>
+        <p class="bottom-title" *ngIf="torneo.montoPremio > 0"><img src="premio.png" alt="prize" class="small-icon"> ${{ torneo.montoPremio }} </p>
+        <p class="bottom-title"><img src="categoria.png" alt="category" class="small-icon"> Categoría {{ nombreCategoria }} </p>
     </div>
 </div>
